@@ -37,7 +37,11 @@ int main(int argc, const char * argv[]) {
         cout << "The program accepts the accession number" << endl;
         exit(EXIT_FAILURE);
     }
-
+    
+    // Redirect the output
+    //    ofstream out("out.txt");
+    //    cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
+    
     // Get the accession number
     string accessionnNumber(argv[1]);
     
@@ -187,13 +191,8 @@ static vector<tuple<int, int>> search9MerDnaABoxes(const Sequence &seq) {
     vector<tuple<int, int>> locations;
     for (Sequence &box : boxes) {
         vector<tuple<int, int>> tmps = seq.indexof(box);
-//        if (tmps.size() > 0) {
-//            cout << "box:" << box.toString() << endl;
-//            cout << "boxr:" << (-box).toString() << endl;
-//        }
         for (tuple<int, int> tmp : tmps) {
             Sequence tmpseq = seq(get<0>(tmp), get<1>(tmp));
-//            cout << tmpseq.toString() << endl;
             locations.push_back(tmp);
         }
     }
