@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "Sequence::copyConstruct(Sequence const&amp;):Sequence.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "sequence">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Sequence::moveConstruct(Sequence&amp;&amp;):Sequence.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "Sequence::operator[](int):Sequence.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(size() + index) % size()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
