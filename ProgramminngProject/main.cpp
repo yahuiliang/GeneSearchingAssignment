@@ -69,6 +69,9 @@ int main(int argc, const char * argv[]) {
     Sequence dnaA;
     dnaA.readSequence("dnaA.fasta");
     
+    // Sync the start index of the sequence
+    sequence.syncStart(oriC_1);
+    
     // Print out the distribution report
     cout << ">Computing the distribution of the sequence..." << endl;
     Sequence::Distribution distribution = sequence.computeDistribution();

@@ -34,6 +34,7 @@ struct Sequence {
     char &operator[](unsigned int index);
     const char &operator[](unsigned int index) const;
     // Get the sub-sequence within a range
+    // When the start and the end are both negative, it searches in the reverse complementary order
     Sequence operator()(int start, int end) const;
     // The structure for shown the distribution of the sequence
     struct Distribution {
@@ -58,9 +59,13 @@ struct Sequence {
     // The difference between `indexof` and `locate` is that `locate` only return the location of the first occurence
     std::vector<std::tuple<int, int>> indexof(const Sequence &other) const;
     std::tuple<int, int> locate(const Sequence &other) const;
+    // The method is for synchronizing the start of the sequence
+    // If no sequence matched with the provided one, the startIndex will remain same
+    int syncStart(const Sequence &oriC);
 private:
     std::string name;
     std::vector<char> *sequence = nullptr;
+    int startIndex = 0;
     
     char &get(unsigned int index) const;
     void indexof(std::vector<std::tuple<int, int>> &rval, const Sequence &other) const;

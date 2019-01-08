@@ -94,20 +94,32 @@ Sequence Sequence::operator()(int start, int end) const {
     Sequence rval;
     
     if (start >= 0 && end >= 0) {
-        if (start >= end) {
-            throw invalid_argument("The end index should be greater than the start index when both indexes are positive");
-        }
         // Keep adding values to the return sequence in the original order
-        for (int i = start; i < end; ++i) {
-            rval.sequence->push_back((*this)[i]);
+        if (start >= end) {
+            for (int i = start; i < size(); ++i) {
+                rval.sequence->push_back((*this)[i]);
+            }
+            for (int i = 0; i < end; ++i) {
+                rval.sequence->push_back((*this)[i]);
+            }
+        } else {
+            for (int i = start; i < end; ++i) {
+                rval.sequence->push_back((*this)[i]);
+            }
         }
     } else if (start < 0 && end < 0) {
-        if (end >= start) {
-            throw invalid_argument("The start index should be greater than the end index when both indexes are negative");
-        }
         // Keep adding values to the return sequence in the reverse order
-        for (int i = -start - 1; i < -end - 1; ++i) {
-            rval.sequence->push_back((*this)[i]);
+        if (end >= start) {
+            for (int i = -start - 1; i < size(); ++i) {
+                rval.sequence->push_back((*this)[i]);
+            }
+            for (int i = 0; i < -end - 1; ++i) {
+                rval.sequence->push_back((*this)[i]);
+            }
+        } else {
+            for (int i = -start - 1; i < -end - 1; ++i) {
+                rval.sequence->push_back((*this)[i]);
+            }
         }
     } else {
         throw invalid_argument("The start index and the end index should both have the same sign");
@@ -221,8 +233,17 @@ string Sequence::toHighlightenedString(std::vector<tuple<int, int>> locations) c
         if (std::get<0>(location) < 0 && std::get<1>(location) < 0) {
             location = make_tuple(-std::get<0>(location) - 1, -std::get<1>(location) - 1);
         }
-        for (int i = std::get<0>(location); i < std::get<1>(location); i++) {
-            highlightIndexes.insert(i);
+        if (std::get<0>(location) < std::get<1>(location)) {
+            for (int i = std::get<0>(location); i < std::get<1>(location); i++) {
+                highlightIndexes.insert(i % size());
+            }
+        } else {
+            for (int i = std::get<0>(location); i < size(); i++) {
+                highlightIndexes.insert(i);
+            }
+            for (int i = 0; i < std::get<1>(location); ++i) {
+                highlightIndexes.insert(i);
+            }
         }
     }
     int i = 0;
@@ -279,17 +300,21 @@ Sequence::Distribution Sequence::computeDistribution() const {
 }
 
 char &Sequence::get(unsigned int index) const {
-    return (*sequence)[index % size()];
+    if (startIndex < 0) {
+        return (*sequence)[(-index + startIndex) % size()];
+    } else {
+        return (*sequence)[(index + startIndex) % size()];
+    }
 }
 
 void Sequence::indexof(vector<tuple<int, int>> &rval, const Sequence &other) const {
     // By using the frame size, scanning through the sequence to see if the matching sequence has been found
     int frameSize = other.size();
     for (int i = 0; i < size(); ++i) {
-        Sequence frame = (*this)(i, i + frameSize);
+        Sequence frame = (*this)(i % size(), (i + frameSize) % size());
         if (frame == other) {
             // Here are values for recording the location range for the sub-sequence
-            rval.push_back(make_tuple(i, i + frameSize));
+            rval.push_back(make_tuple(i % size(), (i + frameSize) % size()));
         }
     }
 }
@@ -298,10 +323,10 @@ tuple<int, int> Sequence::firstOccurence(const Sequence &other) const {
     // By using the frame size, scanning through the sequence to see if the matching sequence has been found
     int frameSize = other.size();
     for (int i = 0; i < size(); ++i) {
-        Sequence frame = (*this)(i, i + frameSize);
+        Sequence frame = (*this)(i % size(), (i + frameSize) % size());
         if (frame == other) {
             // Here are values for recording the location range for the sub-sequence
-            return make_tuple(i, i + frameSize);
+            return make_tuple(i % size(), (i + frameSize) % size());
         }
     }
     return make_tuple(0, 0);
@@ -328,6 +353,14 @@ tuple<int, int> Sequence::locate(const Sequence &other) const {
         rval = make_tuple(-std::get<0>(rval) - 1, -std::get<1>(rval) - 1);
     }
     return rval;
+}
+
+int Sequence::syncStart(const Sequence &oriC) {
+    tuple<int, int> startLocatoin = locate(oriC);
+    if (std::get<0>(startLocatoin) != 0 && std::get<1>(startLocatoin) != 0) {
+        startIndex = std::get<0>(startLocatoin);
+    }
+    return startIndex;
 }
 
 string Sequence::Distribution::toString() {
