@@ -36,7 +36,7 @@ struct Sequence {
     const char & operator[](int index) const;
     // Get the sub-sequence within a range
     // When the start and the end are both negative, it searches in the reverse complementary order
-//    Sequence operator()(int start, int end) const;
+    Sequence operator()(int start, int end) const;
     // The structure for shown the distribution of the sequence
     struct Distribution {
         double APercent = 0;

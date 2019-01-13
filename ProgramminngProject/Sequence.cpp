@@ -151,47 +151,47 @@ Sequence &Sequence::operator+(char gene) {
     return *this;
 }
 
-//Sequence Sequence::operator()(int start, int end) const {
-//    if ((start < 0 && -start > size()) || start >= size()) {
-//        throw invalid_argument("The start index is out of range");
-//    }
-//    if ((end < 0 && -end > size()) || end >= size()) {
-//        throw invalid_argument("The end index is out of range");
-//    }
-//    Sequence rval;
-//    if (start >= 0 && end >= 0) {
-//        // Keep adding values to the return sequence in the original order
-//        if (start < end) {
-//            for (int i = start; i < end; ++i) {
-//                rval + (*this)[i];
-//            }
-//        } else {
-//            for (int i = start; i < size(); ++i) {
-//                rval + (*this)[i];
-//            }
-//            for (int i = 0; i < end; ++i) {
-//                rval + (*this)[i];
-//            }
-//        }
-//    } else if (start < 0 && end < 0) {
-//        // Keep adding values to the return sequence in the reverse order
-//        if (start > end) {
-//            for (int i = start; i > end; --i) {
-//                rval + (*this)[i];
-//            }
-//        } else {
-//            for (int i = start; i >= -size(); --i) {
-//                rval + (*this)[i];
-//            }
-//            for (int i = -1; i > end; --i) {
-//                rval + (*this)[i];
-//            }
-//        }
-//    } else {
-//        throw invalid_argument("The start index and the end index should both have the same sign");
-//    }
-//    return rval;
-//}
+Sequence Sequence::operator()(int start, int end) const {
+    if ((start < 0 && -start > size()) || start >= size()) {
+        throw invalid_argument("The start index is out of range");
+    }
+    if ((end < 0 && -end > size()) || end >= size()) {
+        throw invalid_argument("The end index is out of range");
+    }
+    Sequence rval;
+    if (start >= 0 && end >= 0) {
+        // Keep adding values to the return sequence in the original order
+        if (start < end) {
+            for (int i = start; i < end; ++i) {
+                rval + (*this)[i];
+            }
+        } else {
+            for (int i = start; i < size(); ++i) {
+                rval + (*this)[i];
+            }
+            for (int i = 0; i < end; ++i) {
+                rval + (*this)[i];
+            }
+        }
+    } else if (start < 0 && end < 0) {
+        // Keep adding values to the return sequence in the reverse order
+        if (start > end) {
+            for (int i = start; i > end; --i) {
+                rval + (*this)[i];
+            }
+        } else {
+            for (int i = start; i >= -size(); --i) {
+                rval + (*this)[i];
+            }
+            for (int i = -1; i > end; --i) {
+                rval + (*this)[i];
+            }
+        }
+    } else {
+        throw invalid_argument("The start index and the end index should both have the same sign");
+    }
+    return rval;
+}
 
 #warning double check with Dr. Lee where the starting index is for the sequence
 Sequence Sequence::operator-() const {
