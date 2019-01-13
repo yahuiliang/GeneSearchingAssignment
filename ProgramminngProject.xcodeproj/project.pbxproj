@@ -32,6 +32,7 @@
 		DC1DFD3F21B0CE46000B4B33 /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 		DC1DFD4121B0DC16000B4B33 /* librestclient-cpp.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "librestclient-cpp.1.dylib"; path = "../../../../../usr/local/Cellar/restclient-cpp/0.4.4/lib/librestclient-cpp.1.dylib"; sourceTree = "<group>"; };
 		DC4686E021C70665008F4991 /* librestclient-cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librestclient-cpp.a"; path = "../../../../../usr/local/Cellar/restclient-cpp/0.4.4/lib/librestclient-cpp.a"; sourceTree = "<group>"; };
+		DCB46B5921EAB021000E1ECE /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
 		DCFC6EC221B22E9200113524 /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
 		DCFC6EC321B22E9200113524 /* Sequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,6 +53,7 @@
 		DC1DFD2B21B0CDB8000B4B33 = {
 			isa = PBXGroup;
 			children = (
+				DCB46B5821EAAFEE000E1ECE /* Test */,
 				DC1DFD3621B0CDB8000B4B33 /* ProgramminngProject */,
 				DC1DFD3521B0CDB8000B4B33 /* Products */,
 				DC1DFD3E21B0CE45000B4B33 /* Frameworks */,
@@ -84,6 +86,14 @@
 				DC1DFD3F21B0CE46000B4B33 /* libcurl.tbd */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DCB46B5821EAAFEE000E1ECE /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				DCB46B5921EAB021000E1ECE /* catch.hpp */,
+			);
+			path = Test;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -190,7 +200,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -266,7 +276,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				GCC_OPTIMIZATION_LEVEL = fast;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/usr/local/Cellar/restclient-cpp/0.4.4/lib",

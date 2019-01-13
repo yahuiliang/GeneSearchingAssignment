@@ -15,7 +15,9 @@
 #include <regex>
 #include <vector>
 #include <tuple>
+#include <chrono>
 
+using namespace std::chrono;
 using namespace std;
 using namespace RestClient;
 
@@ -24,10 +26,17 @@ using namespace RestClient;
  * The accession number should be provided
  */
 static void downloadGenFile(const string &accessionNumber);
-static void printLocation(const string &seqName, const tuple<int, int> location);
+static void printLocation(const string &seqName, const tuple<tuple<int, int>, tuple<int, int>> location);
 static void reportRelativeLocations(const Sequence &seq, const Sequence &oriC_1, const Sequence &oriC_2, const Sequence &dnaA);
 static vector<Sequence> gen9MerDnaABoxes();
-static vector<tuple<int, int>> search9MerDnaABoxes(const Sequence &oriC_1);
+static vector<tuple<tuple<int, int>, tuple<int, int>>> search9MerDnaABoxes(const Sequence &seq);
+
+int main1() {
+    Sequence tmp1("TGTGGATADT");
+    Sequence tmp2 = -tmp1 + 'A';
+    cout << (tmp1 == tmp2) << endl;
+    return 0;
+}
 
 #warning the vector data structure may be switched to others to maximize the performance
 #warning how to determine which part is the oriC sequence. By hardcoding?
@@ -56,6 +65,7 @@ int main(int argc, const char * argv[]) {
         downloadGenFile(accessionnNumber);
     }
     
+    auto start = high_resolution_clock::now();
     // Read the sequence from the file
     Sequence sequence;
     sequence.readSequence("sequence.fasta");
@@ -81,60 +91,62 @@ int main(int argc, const char * argv[]) {
     reportRelativeLocations(sequence, oriC_1, oriC_2, dnaA);
     cout << endl;
     // Print out highlightened 9Mer boxes
-    vector<tuple<int, int>> locations;
     cout << ">DnaA boxes " << oriC_1.getName() << endl;
-    locations = search9MerDnaABoxes(oriC_1);
+    vector<tuple<tuple<int, int>, tuple<int, int>>> locations = search9MerDnaABoxes(oriC_1);
     cout << oriC_1.toHighlightenedString(locations) << endl;
     cout << ">DnaA boxes " << oriC_2.getName() << endl;
     locations = search9MerDnaABoxes(oriC_2);
     cout << oriC_2.toHighlightenedString(locations) << endl;
+    cout << ">" << dnaA.getName() << endl;
+    cout << dnaA.toString() << endl;
     cout << endl;
+    
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(end - start);
+    
+    // To get the value of duration use the count()
+    // member function on the duration object
+    cout << "Execution time:" << duration.count() << "ms" << endl;
+    
     return 0;
 }
 
+static int getGeneStartIndex(tuple<tuple<int, int>, tuple<int, int>> location) {
+    int returnVal = get<0>(get<0>(location));
+    if (returnVal < 0) {
+        // The position
+        returnVal = get<1>(get<0>(location));
+    }
+    return returnVal;
+}
+
 static void reportRelativeLocations(const Sequence &seq, const Sequence &oriC_1, const Sequence &oriC_2, const Sequence &dnaA) {
-    tuple<int, int> oriC_1_location = seq.locate(oriC_1);
+    auto oriC_1_location = seq.locate(oriC_1);
     printLocation(oriC_1.getName(), oriC_1_location);
-    tuple<int, int> oriC_2_location = seq.locate(oriC_2);
+    auto oriC_2_location = seq.locate(oriC_2);
     printLocation(oriC_2.getName(), oriC_2_location);
-    tuple<int, int> dnaA_location = seq.locate(dnaA);
+    auto dnaA_location = seq.locate(dnaA);
     printLocation(dnaA.getName(), dnaA_location);
     
-    bool beforeC1, beforeC2;
-    if (get<0>(dnaA_location) < get<0>(oriC_1_location)) {
-        // dnaA is before oriC_1
-        beforeC1 = true;
-    } else {
-        // dnaA is after oriC_1
-        beforeC1 = false;
-    }
+    int oriC2Start = getGeneStartIndex(oriC_2_location);
+    int dnaAStart = getGeneStartIndex(dnaA_location);
     
-    if (get<0>(dnaA_location) < get<0>(oriC_2_location)) {
-        // dnaA is before oriC_2
-        beforeC2 = true;
+    cout << "Relative locations: ";
+    if (dnaAStart < oriC2Start) {
+        cout << "OriC1 DnaA OriC2 (Circular)" << endl;
     } else {
-        // dnaA is after oriC_2
-        beforeC2 = false;
-    }
-    
-    // Determine relative locations
-    // TODO: please double check the information reported is correct
-    if (beforeC1 && beforeC2) {
-        cout << "dnaA is before oriC_1 and oriC_2" << endl;
-    } else if (beforeC1 && !beforeC2) {
-        cout << "dnaA is before oriC_1 and after oriC_2" << endl;
-    } else if (!beforeC1 && beforeC2) {
-        cout << "dnaA is after oriC_1 and before oriC_2" << endl;
-    } else if (!beforeC1 && !beforeC2) {
-        cout << "dnaA is after oriC_1 and oriC_2" << endl;
+        cout << "OriC1 OriC2 DnaA (Circular)" << endl;
     }
 }
 
-static void printLocation(const string &seqName, const tuple<int, int> location) {
+static void printLocation(const string &seqName, const tuple<tuple<int, int>, tuple<int, int>> location) {
     // Play around with them
-    int start = get<0>(location);
-    int end = get<1>(location);
+    int start = get<0>(get<0>(location));
+    int end = get<1>(get<0>(location));
     cout << "start:" << start << " end:" << end << endl;
+    start = get<0>(get<1>(location));
+    end = get<1>(get<1>(location));
+    cout << "start:" << start << " end:" << end << " (reverse complementary)" << endl;
 }
 
 static void downloadGenFile(const string &accessionNumber) {
@@ -165,37 +177,52 @@ static void downloadGenFile(const string &accessionNumber) {
 
 // The recursive function for generating 9-mer DnaA boxes with all possibilities
 // tmpStored vector is for tracking boxes added so far.
-static vector<Sequence> gen9MerDnaABoxes(const vector<vector<char>> &gen9MerDnaAs, vector<Sequence> &&tmpStored, int position) {
-    vector<Sequence> seqs;
+static vector<string> gen9MerDnaABoxes(const vector<vector<char>> &gen9MerDnaAs, int position) {
+    vector<string> seqs;
     if (position < gen9MerDnaAs.size()) {
-        vector<char> genes = gen9MerDnaAs[position];
-        for (Sequence &tmp : tmpStored) {
-            for (char gene : genes) {
-                Sequence newSeq = tmp;
-                newSeq + gene; // The add operation is implemented by using "+" operator
-                seqs.push_back(move(newSeq));
+        vector<string> subResult = gen9MerDnaABoxes(gen9MerDnaAs, position + 1);
+        if (subResult.size() > 0) {
+            for (string &tmp : subResult) {
+                for (char gene : gen9MerDnaAs[position]) {
+                    string cpy = gene + tmp;
+                    seqs.push_back(move(cpy));
+                }
+            }
+        } else {
+            for (char gene : gen9MerDnaAs[position]) {
+                char cstring[5];
+                cstring[0] = gene;
+                cstring[1] = NULL;
+                string tmp(cstring);
+                seqs.push_back(move(tmp));
             }
         }
-        return gen9MerDnaABoxes(gen9MerDnaAs, move(seqs), position + 1);
-    } else {
-        return tmpStored;
+        
     }
+    return seqs;
 }
 
 // The function for generating 9-mer DnaA boxes with all possibilities
 static vector<Sequence> gen9MerDnaABoxes() {
-    const static vector<vector<char>> gen9MerDnaAs = {{'T'}, {'G'}, {'T'}, {'G', 'C'}, {'G', 'A'}, {'A'}, {'T', 'C'}, {'A'}, {'T', 'A', 'C'}};
-    return gen9MerDnaABoxes(gen9MerDnaAs, {Sequence()}, 0);
+    const static vector<vector<char>> gen9MerDnaAs = {{'T'}, {'G'}, {'T'}, {'G', 'C'}, {'A', 'G'}, {'A'}, {'T', 'C'}, {'A'}, {'T', 'A', 'C'}};
+    const vector<string> boxes = gen9MerDnaABoxes(gen9MerDnaAs, 0);
+    vector<Sequence> ans;
+    for (string box : boxes) {
+        Sequence tmp(box);
+        Sequence tmpR = -tmp;
+        ans.push_back(move(tmp));
+        ans.push_back(move(tmpR));
+    }
+    return ans;
 }
 
-static vector<tuple<int, int>> search9MerDnaABoxes(const Sequence &seq) {
+static vector<tuple<tuple<int, int>, tuple<int, int>>> search9MerDnaABoxes(const Sequence &seq) {
     vector<Sequence> boxes = gen9MerDnaABoxes();
     // Search for 9-mer boxes in oriC
-    vector<tuple<int, int>> locations;
+    vector<tuple<tuple<int, int>, tuple<int, int>>> locations;
     for (Sequence &box : boxes) {
-        vector<tuple<int, int>> tmps = seq.indexof(box);
-        for (tuple<int, int> tmp : tmps) {
-            Sequence tmpseq = seq(get<0>(tmp), get<1>(tmp));
+        vector<tuple<tuple<int, int>, tuple<int, int>>> tmps = seq.indexof(box);
+        for (tuple<tuple<int, int>, tuple<int, int>> tmp : tmps) {
             locations.push_back(tmp);
         }
     }

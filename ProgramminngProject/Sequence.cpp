@@ -17,130 +17,189 @@ using namespace std;
 static char complement(char gene);
 
 Sequence::Sequence() {
-    sequence = new vector<char>();
     name = "";
+    sequence = new vector<char>();
+    rsequence = new vector<char>();
 }
 
 Sequence::Sequence(const Sequence &src) {
     name = src.name;
     sequence = new vector<char>();
+    rsequence = new vector<char>();
+    startIndex = src.startIndex;
+    startIndexR = src.startIndexR;
     *sequence = *src.sequence; // Deep copy the contect of the vector
+    *rsequence = *src.rsequence;
 }
 
 Sequence::Sequence(Sequence &&src) {
-    name = src.name;
-    if (sequence != nullptr) {
-        delete sequence;
-    }
+    name = move(src.name);
+    
+    startIndex = src.startIndex;
+    startIndexR = src.startIndexR;
+    src.startIndex = 0;
+    src.startIndexR = 0;
+    
     sequence = src.sequence; // Just move the ownership of the reference to increase the performance
-    // Clear the src resource
-    src.name = "";
+    rsequence = src.rsequence;
+    
     src.sequence = nullptr;
+    src.rsequence = nullptr;
+}
+
+Sequence::Sequence(const std::string &genes) {
+    name = "";
+    sequence = new vector<char>();
+    rsequence = new vector<char>();
+    for (int i = 0; i < genes.length(); ++i) {
+        char gene = genes.at(i);
+        sequence->push_back(gene);
+        rsequence->push_back(complement(gene));
+    }
+    name = "unknown name";
 }
 
 Sequence::~Sequence() {
     if (sequence != nullptr) {
         delete sequence;
     }
+    if (rsequence != nullptr) {
+        delete rsequence;
+    }
 }
 
+// The method is the absolute comparison between two sequences
 bool Sequence::operator==(const Sequence &other) const {
-    bool rval = true;
     if (size() != other.size()) {
         return false;
     }
+    bool isEqual = true;
     // Compare two sequences without considering lower or captital cases
-    for (int i = 0; i < size(); ++i) {
+    for (int i = 0; isEqual && i < size(); ++i) {
         char otherG = other[i];
         char otherCG = toupper(otherG);
         char thisG = (*this)[i];
         char thisCG = toupper(thisG);
         if (thisCG != otherCG) {
-            rval = false;
-            break;
+            isEqual = false;
         }
     }
-    return rval;
+    if (!isEqual) {
+        isEqual = true;
+        for (int i = -1; isEqual && i > -(size() + 1); --i) {
+            char otherG = other[-i - 1];
+            char otherCG = toupper(otherG);
+            char thisG = (*this)[i];
+            char thisCG = toupper(thisG);
+            if (thisCG != otherCG) {
+                isEqual = false;
+            }
+        }
+    }
+    return isEqual;
 }
 
 Sequence &Sequence::operator=(Sequence &&src) {
-    name = src.name;
+    name = move(src.name);
+    
+    startIndex = src.startIndex;
+    startIndexR = src.startIndexR;
+    src.startIndex = 0;
+    src.startIndexR = 0;
+    
     if (sequence != nullptr) {
         delete sequence;
     }
+    if (rsequence != nullptr) {
+        delete rsequence;
+    }
+    
     sequence = src.sequence; // Just move the ownership of the reference to increase the performance
-    // Clear the src resource
-    src.name = "";
+    rsequence = src.rsequence;
+    
     src.sequence = nullptr;
+    src.rsequence = nullptr;
     return *this;
 }
 
 Sequence &Sequence::operator=(const Sequence &src) {
     name = src.name;
-    sequence = new vector<char>();
+    startIndex = src.startIndex;
+    startIndexR = src.startIndexR;
     *sequence = *src.sequence; // Deep copy the contect of the vector
+    *rsequence = *src.rsequence;
     return *this;
 }
 
-char &Sequence::operator[](unsigned int index) {
-    return get(index);
-}
-
-const char &Sequence::operator[](unsigned int index) const {
-    return get(index);
-}
-
-Sequence Sequence::operator()(int start, int end) const {
-    Sequence rval;
-    
-    if (start >= 0 && end >= 0) {
-        // Keep adding values to the return sequence in the original order
-        if (start >= end) {
-            for (int i = start; i < size(); ++i) {
-                rval.sequence->push_back((*this)[i]);
-            }
-            for (int i = 0; i < end; ++i) {
-                rval.sequence->push_back((*this)[i]);
-            }
-        } else {
-            for (int i = start; i < end; ++i) {
-                rval.sequence->push_back((*this)[i]);
-            }
-        }
-    } else if (start < 0 && end < 0) {
-        // Keep adding values to the return sequence in the reverse order
-        if (end >= start) {
-            for (int i = -start - 1; i < size(); ++i) {
-                rval.sequence->push_back((*this)[i]);
-            }
-            for (int i = 0; i < -end - 1; ++i) {
-                rval.sequence->push_back((*this)[i]);
-            }
-        } else {
-            for (int i = -start - 1; i < -end - 1; ++i) {
-                rval.sequence->push_back((*this)[i]);
-            }
-        }
-    } else {
-        throw invalid_argument("The start index and the end index should both have the same sign");
+// The operator automatically read the reverse complmentary in order with the base index
+const char &Sequence::operator[](int index) const {
+    if ((index > -1 && index >= size()) || (index < 0 && index < -size())) {
+        throw invalid_argument("the index is out of range");
     }
-    
-    return rval;
+    if (index > -1) {
+        index = (index + startIndex) % size();
+        return (*sequence)[index];
+    } else {
+        index = (-index + startIndexR - 1) % size();
+        return (*rsequence)[rsequence->size() - index - 1];
+    }
 }
 
 Sequence &Sequence::operator+(char gene) {
     sequence->push_back(gene);
+    rsequence->push_back(complement(gene));
     return *this;
 }
+
+//Sequence Sequence::operator()(int start, int end) const {
+//    if ((start < 0 && -start > size()) || start >= size()) {
+//        throw invalid_argument("The start index is out of range");
+//    }
+//    if ((end < 0 && -end > size()) || end >= size()) {
+//        throw invalid_argument("The end index is out of range");
+//    }
+//    Sequence rval;
+//    if (start >= 0 && end >= 0) {
+//        // Keep adding values to the return sequence in the original order
+//        if (start < end) {
+//            for (int i = start; i < end; ++i) {
+//                rval + (*this)[i];
+//            }
+//        } else {
+//            for (int i = start; i < size(); ++i) {
+//                rval + (*this)[i];
+//            }
+//            for (int i = 0; i < end; ++i) {
+//                rval + (*this)[i];
+//            }
+//        }
+//    } else if (start < 0 && end < 0) {
+//        // Keep adding values to the return sequence in the reverse order
+//        if (start > end) {
+//            for (int i = start; i > end; --i) {
+//                rval + (*this)[i];
+//            }
+//        } else {
+//            for (int i = start; i >= -size(); --i) {
+//                rval + (*this)[i];
+//            }
+//            for (int i = -1; i > end; --i) {
+//                rval + (*this)[i];
+//            }
+//        }
+//    } else {
+//        throw invalid_argument("The start index and the end index should both have the same sign");
+//    }
+//    return rval;
+//}
 
 #warning double check with Dr. Lee where the starting index is for the sequence
 Sequence Sequence::operator-() const {
     Sequence rval;
     // Keep adding genes in the reverse order
-    for (int i = (int) sequence->size() - 1; i > -1; --i) {
-        char gene = (*this)[i];
-        gene = complement(gene);
-        rval.sequence->push_back(gene);
+    for (int i = 0; i < size(); ++i) {
+        char gene = (*this)[-(i + 1)];
+        rval + gene;
     }
     rval.name = name + " reversed complementary";
     return rval;
@@ -206,6 +265,7 @@ void Sequence::readSequence(const string &filename) {
         while (inFile.get(c)) {
             if (c != '\n') {
                 sequence->push_back(c);
+                rsequence->push_back(complement(c));
             }
         }
         inFile.close();
@@ -225,23 +285,27 @@ string Sequence::toString() const {
     return rval;
 }
 
-string Sequence::toHighlightenedString(std::vector<tuple<int, int>> locations) const {
+string Sequence::toHighlightenedString(vector<tuple<tuple<int, int>, tuple<int, int>>> locations) const {
     string rval = "";
     set<int> highlightIndexes;
-    for (tuple<int, int> &location : locations) {
-        // Convert negative indexes to positive
-        if (std::get<0>(location) < 0 && std::get<1>(location) < 0) {
-            location = make_tuple(-std::get<0>(location) - 1, -std::get<1>(location) - 1);
+    for (tuple<tuple<int, int>, tuple<int, int>> &location : locations) {
+        // Find the one corresponds to the ori sequence
+        tuple<int, int> tmp = get<0>(location);
+        if (get<0>(tmp) < 0) {
+            tmp = get<1>(location);
         }
-        if (std::get<0>(location) < std::get<1>(location)) {
-            for (int i = std::get<0>(location); i < std::get<1>(location); i++) {
-                highlightIndexes.insert(i % size());
-            }
-        } else {
-            for (int i = std::get<0>(location); i < size(); i++) {
+        // Convert negative indexes to positive
+        int location1 = std::get<0>(tmp);
+        int location2 = std::get<1>(tmp);
+        if (location1 < location2) {
+            for (int i = location1; i < location2; i++) {
                 highlightIndexes.insert(i);
             }
-            for (int i = 0; i < std::get<1>(location); ++i) {
+        } else {
+            for (int i = location1; i < size(); i++) {
+                highlightIndexes.insert(i);
+            }
+            for (int i = 0; i < location2; ++i) {
                 highlightIndexes.insert(i);
             }
         }
@@ -299,66 +363,80 @@ Sequence::Distribution Sequence::computeDistribution() const {
     return distribution;
 }
 
-char &Sequence::get(unsigned int index) const {
-    if (startIndex < 0) {
-        return (*sequence)[(-index + startIndex) % size()];
-    } else {
-        return (*sequence)[(index + startIndex) % size()];
+// If the first location is negative, this means the sequence that the function searches for is the in the reverse complementary order
+vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::indexof(const Sequence &other) const {
+    if (other.size() > size()) {
+        throw invalid_argument("the size of the sequence to be located is greater than the src sequence");
     }
-}
-
-void Sequence::indexof(vector<tuple<int, int>> &rval, const Sequence &other) const {
+    vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> rval;
     // By using the frame size, scanning through the sequence to see if the matching sequence has been found
     int frameSize = other.size();
     for (int i = 0; i < size(); ++i) {
-        Sequence frame = (*this)(i % size(), (i + frameSize) % size());
-        if (frame == other) {
+        int start = i;
+        int end = (i + frameSize) % size();
+        if (compareTo(other, start, end)) {
             // Here are values for recording the location range for the sub-sequence
-            rval.push_back(make_tuple(i % size(), (i + frameSize) % size()));
+            auto po = make_tuple(start, end);
+            auto rpo = make_tuple(-((size() - end) % size()) - 1, -((size() - start) % size()) - 1);
+            rval.push_back(make_tuple(po, rpo));
         }
     }
-}
-
-tuple<int, int> Sequence::firstOccurence(const Sequence &other) const {
-    // By using the frame size, scanning through the sequence to see if the matching sequence has been found
-    int frameSize = other.size();
-    for (int i = 0; i < size(); ++i) {
-        Sequence frame = (*this)(i % size(), (i + frameSize) % size());
-        if (frame == other) {
+    for (int i = -1; i > -size() - 1; --i) {
+        int start = i;
+        int end = -(((-i - 1) + frameSize) % size() + 1);
+        if (compareTo(other, start, end)) {
             // Here are values for recording the location range for the sub-sequence
-            return make_tuple(i % size(), (i + frameSize) % size());
+            auto po = make_tuple(start, end);
+            auto rpo = make_tuple((size() + end + 1) % size(), (size() + start + 1) % size());
+            rval.push_back(make_tuple(po, rpo));
         }
-    }
-    return make_tuple(0, 0);
-}
-
-vector<tuple<int, int>> Sequence::indexof(const Sequence &other) const {
-    vector<tuple<int, int>> rval;
-    indexof(rval, other);
-    vector<tuple<int, int>> rrval;
-    indexof(rrval, -other);
-    for (tuple<int, int> &location : rrval) {
-        location = make_tuple(-std::get<0>(location) - 1, -std::get<1>(location) - 1);
-        rval.push_back(move(location));
     }
     return rval;
 }
 
-tuple<int, int> Sequence::locate(const Sequence &other) const {
+tuple<tuple<int, int>, tuple<int, int>> Sequence::locate(const Sequence &other) const {
+    if (other.size() > size()) {
+        throw invalid_argument("the size of the sequence to be located is greater than the src sequence");
+    }
     cout << ">locatinng " << other.name << "..." << endl;
-    tuple<int, int> rval;
-    rval = firstOccurence(other);
-    if (rval == make_tuple(0, 0)) {
-        rval = firstOccurence(-other);
-        rval = make_tuple(-std::get<0>(rval) - 1, -std::get<1>(rval) - 1);
+    int frameSize = other.size();
+    for (int i = 0; i < size(); ++i) {
+        int start = i;
+        int end = (i + frameSize) % size();
+        if (compareTo(other, start, end)) {
+            // Here are values for recording the location range for the sub-sequence
+            auto po = make_tuple(start, end);
+            auto rpo = make_tuple(-((size() - end) % size()) - 1, -((size() - start) % size()) - 1);
+            return make_tuple(po, rpo);
+        }
     }
-    return rval;
+    for (int i = -1; i > -size() - 1; --i) {
+        int start = i;
+        int end = -(((-i - 1) + frameSize) % size() + 1);
+        if (compareTo(other, start, end)) {
+            // Here are values for recording the location range for the sub-sequence
+            auto po = make_tuple((size() + end + 1) % size(), (size() + start + 1) % size());
+            auto rpo = make_tuple(start, end);
+            return make_tuple(po, rpo);
+        }
+    }
+    return make_tuple(make_tuple(size(), size()), make_tuple(size(), size()));
 }
 
 int Sequence::syncStart(const Sequence &oriC) {
-    tuple<int, int> startLocatoin = locate(oriC);
-    if (std::get<0>(startLocatoin) != 0 && std::get<1>(startLocatoin) != 0) {
-        startIndex = std::get<0>(startLocatoin);
+    tuple<int, int> startLocatoin = std::get<0>(locate(oriC));
+    if (std::get<0>(startLocatoin) != size() && std::get<1>(startLocatoin) != size()) {
+        int start = std::get<0>(startLocatoin);
+        int end = std::get<1>(startLocatoin);
+        if (start < 0) {
+            // The reverse complementary order
+            startIndexR = -end - 1;
+            startIndex = size() + end;
+        } else {
+            // The normal order
+            startIndex = start;
+            startIndexR = size() - start;
+        }
     }
     return startIndex;
 }
@@ -370,4 +448,14 @@ string Sequence::Distribution::toString() {
     string TP = "T%=" + to_string(TPercent) + "%";
     string GCP = "GC%=" + to_string(GCPercent) + "%";
     return AP + string("\n") + CP + string("\n") + GP + string("\n") + TP + string("\n") + GCP;
+}
+
+bool Sequence::compareTo(const Sequence & other, int start, int end) const {
+    bool isEqual = true;
+    for (int i = start; isEqual && i < end; i++) {
+        if (toupper(other[i - start]) != toupper((*this)[i])) {
+            isEqual = false;
+        }
+    }
+    return isEqual;
 }
