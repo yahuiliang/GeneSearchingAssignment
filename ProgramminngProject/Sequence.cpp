@@ -374,7 +374,6 @@ tuple<tuple<int, int>, tuple<int, int>> Sequence::locate(const Sequence &other) 
     if (other.size() > size()) {
         throw invalid_argument("the size of the sequence to be located is greater than the src sequence");
     }
-    cout << ">locatinng " << other.name << "..." << endl;
     int frameSize = other.size();
     for (int i = 0; i < size(); ++i) {
         int start = i;

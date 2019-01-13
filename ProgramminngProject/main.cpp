@@ -55,7 +55,6 @@ int main(int argc, const char * argv[]) {
     string accessionnNumber(argv[1]);
     
     // Download the gen file
-    // TODO: handle exceptional cases here
     // The file is downloaded to the same directory as the executable binary
     
     // Check if the file has existed
@@ -121,10 +120,15 @@ static int getGeneStartIndex(tuple<tuple<int, int>, tuple<int, int>> location) {
 }
 
 static void reportRelativeLocations(const Sequence &seq, const Sequence &oriC_1, const Sequence &oriC_2, const Sequence &dnaA) {
+    cout << ">locatinng " << oriC_1.getName() << "..." << endl;
     auto oriC_1_location = seq.locate(oriC_1);
     printLocation(oriC_1.getName(), oriC_1_location);
+    
+    cout << ">locatinng " << oriC_2.getName() << "..." << endl;
     auto oriC_2_location = seq.locate(oriC_2);
     printLocation(oriC_2.getName(), oriC_2_location);
+    
+    cout << ">locatinng " << dnaA.getName() << "..." << endl;
     auto dnaA_location = seq.locate(dnaA);
     printLocation(dnaA.getName(), dnaA_location);
     
