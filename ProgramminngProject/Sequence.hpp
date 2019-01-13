@@ -65,8 +65,8 @@ struct Sequence {
     int syncStart(const Sequence & oriC);
 private:
     std::string name;
-    std::vector<char> * sequence = nullptr;
-    std::vector<char> * rsequence = nullptr;
+    std::vector<char> sequence;
+    std::vector<char> rsequence;
     int startIndex = 0;
     int startIndexR = 0;
     

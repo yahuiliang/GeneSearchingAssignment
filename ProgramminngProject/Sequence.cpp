@@ -18,21 +18,17 @@ static char complement(char gene);
 
 Sequence::Sequence() {
     name = "";
-    sequence = new vector<char>();
-    rsequence = new vector<char>();
 }
 
-Sequence::Sequence(const Sequence &src) {
+Sequence::Sequence(const Sequence & src) {
     name = src.name;
-    sequence = new vector<char>();
-    rsequence = new vector<char>();
     startIndex = src.startIndex;
     startIndexR = src.startIndexR;
-    *sequence = *src.sequence; // Deep copy the contect of the vector
-    *rsequence = *src.rsequence;
+    sequence = src.sequence; // Deep copy the contect of the vector
+    rsequence = src.rsequence;
 }
 
-Sequence::Sequence(Sequence &&src) {
+Sequence::Sequence(Sequence && src) {
     name = move(src.name);
     
     startIndex = src.startIndex;
@@ -40,36 +36,26 @@ Sequence::Sequence(Sequence &&src) {
     src.startIndex = 0;
     src.startIndexR = 0;
     
-    sequence = src.sequence; // Just move the ownership of the reference to increase the performance
-    rsequence = src.rsequence;
-    
-    src.sequence = nullptr;
-    src.rsequence = nullptr;
+    sequence = move(src.sequence); // Just move the ownership of the reference to increase the performance
+    rsequence = move(src.rsequence);
 }
 
-Sequence::Sequence(const std::string &genes) {
+Sequence::Sequence(const std::string & genes) {
     name = "";
-    sequence = new vector<char>();
-    rsequence = new vector<char>();
     for (int i = 0; i < genes.length(); ++i) {
         char gene = genes.at(i);
-        sequence->push_back(gene);
-        rsequence->push_back(complement(gene));
+        sequence.push_back(gene);
+        rsequence.push_back(complement(gene));
     }
     name = "unknown name";
 }
 
 Sequence::~Sequence() {
-    if (sequence != nullptr) {
-        delete sequence;
-    }
-    if (rsequence != nullptr) {
-        delete rsequence;
-    }
+    // No memory should be released
 }
 
 // The method is the absolute comparison between two sequences
-bool Sequence::operator==(const Sequence &other) const {
+bool Sequence::operator==(const Sequence & other) const {
     if (size() != other.size()) {
         return false;
     }
@@ -99,7 +85,7 @@ bool Sequence::operator==(const Sequence &other) const {
     return isEqual;
 }
 
-Sequence &Sequence::operator=(Sequence &&src) {
+Sequence & Sequence::operator=(Sequence && src) {
     name = move(src.name);
     
     startIndex = src.startIndex;
@@ -107,27 +93,18 @@ Sequence &Sequence::operator=(Sequence &&src) {
     src.startIndex = 0;
     src.startIndexR = 0;
     
-    if (sequence != nullptr) {
-        delete sequence;
-    }
-    if (rsequence != nullptr) {
-        delete rsequence;
-    }
+    sequence = move(src.sequence); // Just move the ownership of the reference to increase the performance
+    rsequence = move(src.rsequence);
     
-    sequence = src.sequence; // Just move the ownership of the reference to increase the performance
-    rsequence = src.rsequence;
-    
-    src.sequence = nullptr;
-    src.rsequence = nullptr;
     return *this;
 }
 
-Sequence &Sequence::operator=(const Sequence &src) {
+Sequence & Sequence::operator=(const Sequence & src) {
     name = src.name;
     startIndex = src.startIndex;
     startIndexR = src.startIndexR;
-    *sequence = *src.sequence; // Deep copy the contect of the vector
-    *rsequence = *src.rsequence;
+    sequence = src.sequence; // Deep copy the contect of the vector
+    rsequence = src.rsequence;
     return *this;
 }
 
@@ -138,16 +115,16 @@ const char &Sequence::operator[](int index) const {
     }
     if (index > -1) {
         index = (index + startIndex) % size();
-        return (*sequence)[index];
+        return sequence[index];
     } else {
         index = (-index + startIndexR - 1) % size();
-        return (*rsequence)[rsequence->size() - index - 1];
+        return rsequence[rsequence.size() - index - 1];
     }
 }
 
 Sequence &Sequence::operator+(char gene) {
-    sequence->push_back(gene);
-    rsequence->push_back(complement(gene));
+    sequence.push_back(gene);
+    rsequence.push_back(complement(gene));
     return *this;
 }
 
@@ -193,7 +170,6 @@ Sequence Sequence::operator()(int start, int end) const {
     return rval;
 }
 
-#warning double check with Dr. Lee where the starting index is for the sequence
 Sequence Sequence::operator-() const {
     Sequence rval;
     // Keep adding genes in the reverse order
@@ -246,7 +222,7 @@ static char complement(char gene) {
 }
 
 int Sequence::size() const {
-    return (int) sequence->size();
+    return (int) sequence.size();
 }
 
 std::string Sequence::getName() const {
@@ -264,8 +240,8 @@ void Sequence::readSequence(const string &filename) {
         // Keep reading sequences
         while (inFile.get(c)) {
             if (c != '\n') {
-                sequence->push_back(c);
-                rsequence->push_back(complement(c));
+                sequence.push_back(c);
+                rsequence.push_back(complement(c));
             }
         }
         inFile.close();
@@ -275,7 +251,7 @@ void Sequence::readSequence(const string &filename) {
 string Sequence::toString() const {
     string rval = "";
     int counter = 0;
-    for (char gene : *sequence) {
+    for (char gene : sequence) {
         rval += toupper(gene);
         counter++;
         if (counter % 60 == 0) {
@@ -311,7 +287,7 @@ string Sequence::toHighlightenedString(vector<tuple<tuple<int, int>, tuple<int, 
         }
     }
     int i = 0;
-    for (char gene : *sequence) {
+    for (char gene : sequence) {
         if (highlightIndexes.find(i) != highlightIndexes.end()) {
             rval += toupper(gene);
         } else {
@@ -327,7 +303,7 @@ string Sequence::toHighlightenedString(vector<tuple<tuple<int, int>, tuple<int, 
 
 Sequence::Distribution Sequence::computeDistribution() const {
     double AOccurence = 0, COccurence = 0, GOccurence = 0, TOccurence = 0;
-    for (char gene : *sequence) {
+    for (char gene : sequence) {
         switch (gene) {
             case 'A':
                 AOccurence++;
@@ -452,9 +428,44 @@ string Sequence::Distribution::toString() {
 
 bool Sequence::compareTo(const Sequence & other, int start, int end) const {
     bool isEqual = true;
-    for (int i = start; isEqual && i < end; i++) {
-        if (toupper(other[i - start]) != toupper((*this)[i])) {
-            isEqual = false;
+    int j = 0;
+    if (start < 0 && end < 0) {
+        if (start > end) {
+            for (int i = start; i > end; --i, ++j) {
+                if (toupper(other[j]) != toupper((*this)[i])) {
+                    isEqual = false;
+                }
+            }
+        } else {
+            for (int i = start; i > -size() - 1; --i, ++j) {
+                if (toupper(other[j]) != toupper((*this)[i])) {
+                    isEqual = false;
+                }
+            }
+            for (int i = -1; i > end; --i, ++j) {
+                if (toupper(other[j]) != toupper((*this)[i])) {
+                    isEqual = false;
+                }
+            }
+        }
+    } else {
+        if (start >= end) {
+            for (int i = start; isEqual && i < size(); ++i, ++j) {
+                if (toupper(other[j]) != toupper((*this)[i])) {
+                    isEqual = false;
+                }
+            }
+            for (int i = 0; isEqual && i < end; ++i, ++j) {
+                if (toupper(other[j]) != toupper((*this)[i])) {
+                    isEqual = false;
+                }
+            }
+        } else {
+            for (int i = start; isEqual && i < end; ++i, ++j) {
+                if (toupper(other[j]) != toupper((*this)[i])) {
+                    isEqual = false;
+                }
+            }
         }
     }
     return isEqual;
