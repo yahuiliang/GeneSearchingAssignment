@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DC1DFD3821B0CDB8000B4B33 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC1DFD3721B0CDB8000B4B33 /* main.cpp */; };
 		DC1DFD4021B0CE46000B4B33 /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DC1DFD3F21B0CE46000B4B33 /* libcurl.tbd */; };
 		DC4686E121C70665008F4991 /* librestclient-cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4686E021C70665008F4991 /* librestclient-cpp.a */; };
+		DCC3E3F621EDA7CF00000A2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCC3E3F521EDA7CF00000A2F /* main.cpp */; };
+		DCC3E3FC21EDA83100000A2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC1DFD3721B0CDB8000B4B33 /* main.cpp */; };
+		DCC3E3FF21EDAEDC00000A2F /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCFC6EC221B22E9200113524 /* Sequence.cpp */; };
 		DCFC6EC421B22E9200113524 /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCFC6EC221B22E9200113524 /* Sequence.cpp */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +26,15 @@
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		DCC3E3F121EDA7CF00000A2F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +43,9 @@
 		DC1DFD3F21B0CE46000B4B33 /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 		DC1DFD4121B0DC16000B4B33 /* librestclient-cpp.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "librestclient-cpp.1.dylib"; path = "../../../../../usr/local/Cellar/restclient-cpp/0.4.4/lib/librestclient-cpp.1.dylib"; sourceTree = "<group>"; };
 		DC4686E021C70665008F4991 /* librestclient-cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librestclient-cpp.a"; path = "../../../../../usr/local/Cellar/restclient-cpp/0.4.4/lib/librestclient-cpp.a"; sourceTree = "<group>"; };
-		DCB46B5921EAB021000E1ECE /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
+		DCC3E3F321EDA7CF00000A2F /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCC3E3F521EDA7CF00000A2F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		DCC3E3FA21EDA7F800000A2F /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
 		DCFC6EC221B22E9200113524 /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
 		DCFC6EC321B22E9200113524 /* Sequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -47,14 +60,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DCC3E3F021EDA7CF00000A2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		DC1DFD2B21B0CDB8000B4B33 = {
 			isa = PBXGroup;
 			children = (
-				DCB46B5821EAAFEE000E1ECE /* Test */,
 				DC1DFD3621B0CDB8000B4B33 /* ProgramminngProject */,
+				DCC3E3F421EDA7CF00000A2F /* Test */,
 				DC1DFD3521B0CDB8000B4B33 /* Products */,
 				DC1DFD3E21B0CE45000B4B33 /* Frameworks */,
 			);
@@ -64,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				DC1DFD3421B0CDB8000B4B33 /* ProgramminngProject */,
+				DCC3E3F321EDA7CF00000A2F /* Test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -88,10 +109,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		DCB46B5821EAAFEE000E1ECE /* Test */ = {
+		DCC3E3F421EDA7CF00000A2F /* Test */ = {
 			isa = PBXGroup;
 			children = (
-				DCB46B5921EAB021000E1ECE /* catch.hpp */,
+				DCC3E3FA21EDA7F800000A2F /* catch.hpp */,
+				DCC3E3F521EDA7CF00000A2F /* main.cpp */,
 			);
 			path = Test;
 			sourceTree = "<group>";
@@ -116,6 +138,23 @@
 			productReference = DC1DFD3421B0CDB8000B4B33 /* ProgramminngProject */;
 			productType = "com.apple.product-type.tool";
 		};
+		DCC3E3F221EDA7CF00000A2F /* Test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCC3E3F721EDA7CF00000A2F /* Build configuration list for PBXNativeTarget "Test" */;
+			buildPhases = (
+				DCC3E3EF21EDA7CF00000A2F /* Sources */,
+				DCC3E3F021EDA7CF00000A2F /* Frameworks */,
+				DCC3E3F121EDA7CF00000A2F /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Test;
+			productName = Test;
+			productReference = DCC3E3F321EDA7CF00000A2F /* Test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -126,6 +165,9 @@
 				ORGANIZATIONNAME = "Yahui Liang";
 				TargetAttributes = {
 					DC1DFD3321B0CDB8000B4B33 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+					DCC3E3F221EDA7CF00000A2F = {
 						CreatedOnToolsVersion = 10.1;
 					};
 				};
@@ -143,6 +185,7 @@
 			projectRoot = "";
 			targets = (
 				DC1DFD3321B0CDB8000B4B33 /* ProgramminngProject */,
+				DCC3E3F221EDA7CF00000A2F /* Test */,
 			);
 		};
 /* End PBXProject section */
@@ -152,8 +195,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCC3E3FC21EDA83100000A2F /* main.cpp in Sources */,
 				DCFC6EC421B22E9200113524 /* Sequence.cpp in Sources */,
-				DC1DFD3821B0CDB8000B4B33 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCC3E3EF21EDA7CF00000A2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCC3E3FF21EDAEDC00000A2F /* Sequence.cpp in Sources */,
+				DCC3E3F621EDA7CF00000A2F /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +348,27 @@
 					"/usr/local/Cellar/restclient-cpp/0.4.4/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "/usr/local/Cellar/restclient-cpp/0.4.4/include/";
+			};
+			name = Release;
+		};
+		DCC3E3F821EDA7CF00000A2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				"HEADER_SEARCH_PATHS[arch=*]" = ./ProgrammingProject;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = ./ProgrammingProject;
+			};
+			name = Debug;
+		};
+		DCC3E3F921EDA7CF00000A2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = ./ProgrammingProject;
 			};
 			name = Release;
 		};
@@ -316,6 +389,15 @@
 			buildConfigurations = (
 				DC1DFD3C21B0CDB8000B4B33 /* Debug */,
 				DC1DFD3D21B0CDB8000B4B33 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCC3E3F721EDA7CF00000A2F /* Build configuration list for PBXNativeTarget "Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCC3E3F821EDA7CF00000A2F /* Debug */,
+				DCC3E3F921EDA7CF00000A2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

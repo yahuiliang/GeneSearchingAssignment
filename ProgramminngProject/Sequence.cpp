@@ -50,10 +50,6 @@ Sequence::Sequence(const std::string & genes) {
     name = "unknown name";
 }
 
-Sequence::~Sequence() {
-    // No memory should be released
-}
-
 // The method is the absolute comparison between two sequences
 bool Sequence::operator==(const Sequence & other) const {
     if (size() != other.size()) {
@@ -340,7 +336,7 @@ Sequence::Distribution Sequence::computeDistribution() const {
 }
 
 // If the first location is negative, this means the sequence that the function searches for is the in the reverse complementary order
-vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::indexof(const Sequence &other) const {
+vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::indexof(const Sequence & other) const {
     if (other.size() > size()) {
         throw invalid_argument("the size of the sequence to be located is greater than the src sequence");
     }
@@ -362,15 +358,15 @@ vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::indexof(const Seq
         int end = -(((-i - 1) + frameSize) % size() + 1);
         if (compareTo(other, start, end)) {
             // Here are values for recording the location range for the sub-sequence
-            auto po = make_tuple(start, end);
-            auto rpo = make_tuple((size() + end + 1) % size(), (size() + start + 1) % size());
+            auto po = make_tuple((size() + end + 1) % size(), (size() + start + 1) % size());
+            auto rpo = make_tuple(start, end);
             rval.push_back(make_tuple(po, rpo));
         }
     }
     return rval;
 }
 
-tuple<tuple<int, int>, tuple<int, int>> Sequence::locate(const Sequence &other) const {
+tuple<tuple<int, int>, tuple<int, int>> Sequence::locate(const Sequence & other) const {
     if (other.size() > size()) {
         throw invalid_argument("the size of the sequence to be located is greater than the src sequence");
     }

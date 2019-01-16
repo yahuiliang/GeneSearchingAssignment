@@ -25,7 +25,7 @@ using namespace RestClient;
  * Download the gen file from the database
  * The accession number should be provided
  */
-static void downloadGenFile(const string &accessionNumber);
+static void downloadGenFile(const string & dest, const string &accessionNumber);
 static void printLocation(const string &seqName, const tuple<tuple<int, int>, tuple<int, int>> location);
 static void reportRelativeLocations(const Sequence &seq, const Sequence &oriC_1, const Sequence &oriC_2, const Sequence &dnaA);
 static vector<Sequence> gen9MerDnaABoxes();
@@ -54,29 +54,30 @@ int main(int argc, const char * argv[]) {
     // Get the accession number
     string accessionnNumber(argv[1]);
     
+    string baseDir = "genes/";
+    
     // Download the gen file
     // The file is downloaded to the same directory as the executable binary
-    
     // Check if the file has existed
     // If not, install the file from the database
-    ifstream sequenceFile("sequence.fasta");
+    ifstream sequenceFile(baseDir + "sequence.fasta");
     if (!((bool)sequenceFile)) {
-        downloadGenFile(accessionnNumber);
+        downloadGenFile(baseDir + "sequence.fasta", accessionnNumber);
     }
     
     auto start = high_resolution_clock::now();
     // Read the sequence from the file
     Sequence sequence;
-    sequence.readSequence("sequence.fasta");
+    sequence.readSequence(baseDir + "sequence.fasta");
     // Read the oriC_1 sequence from the file
     Sequence oriC_1;
-    oriC_1.readSequence("oriC_1.fasta");
+    oriC_1.readSequence(baseDir + "oriC_1.fasta");
     // Read the oriC_2 sequence from the file
     Sequence oriC_2;
-    oriC_2.readSequence("oriC_2.fasta");
+    oriC_2.readSequence(baseDir + "oriC_2.fasta");
     // Read the dnaA sequence from the file
     Sequence dnaA;
-    dnaA.readSequence("dnaA.fasta");
+    dnaA.readSequence(baseDir + "dnaA.fasta");
     
     // Sync the start index of the sequence
     sequence.syncStart(oriC_1);
@@ -101,7 +102,7 @@ int main(int argc, const char * argv[]) {
     cout << endl;
     
     auto end = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(end - start);
+    auto duration = duration_cast<milliseconds>(end - start);
     
     // To get the value of duration use the count()
     // member function on the duration object
@@ -153,7 +154,7 @@ static void printLocation(const string &seqName, const tuple<tuple<int, int>, tu
     cout << "start:" << start << " end:" << end << " (reverse complementary)" << endl;
 }
 
-static void downloadGenFile(const string &accessionNumber) {
+static void downloadGenFile(const string & dest, const string &accessionNumber) {
     // Send the HTTP GET request to download the file
     cout << "downloading the gene file..." << endl;
     char tmp[500];
@@ -169,7 +170,7 @@ static void downloadGenFile(const string &accessionNumber) {
     auto itr = m.begin() + 1;
     string filename = *itr;
     // Write the file body to the local disk
-    ofstream genFile(filename.c_str());
+    ofstream genFile(dest.c_str());
     if (!genFile.is_open()) {
         cout << "The gene file cannot be written to the disk" << endl;
         exit(EXIT_FAILURE);
@@ -208,7 +209,7 @@ static vector<string> gen9MerDnaABoxes(const vector<vector<char>> &gen9MerDnaAs,
 
 // The function for generating 9-mer DnaA boxes with all possibilities
 static vector<Sequence> gen9MerDnaABoxes() {
-    const static vector<vector<char>> gen9MerDnaAs = {{'T'}, {'G'}, {'T'}, {'G', 'C'}, {'A', 'G'}, {'A'}, {'T', 'C'}, {'A'}, {'T', 'A', 'C'}};
+    const static vector<vector<char>> gen9MerDnaAs = {{'T'}, {'G'}, {'T'}, {'G', 'C'}, {'A', 'G'}, {'A'}, {'T', 'C'}, {'A'}, {'T', 'A', 'C', 'G'}};
     const vector<string> boxes = gen9MerDnaABoxes(gen9MerDnaAs, 0);
     vector<Sequence> ans;
     for (string box : boxes) {

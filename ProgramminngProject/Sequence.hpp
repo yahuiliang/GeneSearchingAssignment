@@ -18,7 +18,6 @@
 struct Sequence {
     // Here are constructor declarations
     Sequence(); // Just initialize the empty sequence
-    ~Sequence(); // The destructor of the sequence
     Sequence(const Sequence & src); // The copy constructor for the sequence
     Sequence(Sequence && src); // The move constructor of the sequence
     Sequence(const std::string & genes);
@@ -28,6 +27,7 @@ struct Sequence {
     bool operator==(const Sequence & other) const;
     // The function will push an element to the sequence. The reference to itself will be returned. The returned value can be
     // assigned to either the new object or the referece of the object.
+    // The time complexity for pushing the element to the sequence is O(n).
     Sequence & operator+(char gene);
     Sequence operator-() const; // The function should be the reverse complement sequence
     // This is mainly for getting the single gene from the sequence
@@ -69,8 +69,7 @@ private:
     std::vector<char> rsequence;
     int startIndex = 0;
     int startIndexR = 0;
-    
-    std::tuple<int, int> firstOccurence(const Sequence &other) const;
+
     Sequence sub(int start, int end) const;
     bool compareTo(const Sequence & other, int start, int end) const;
 };
