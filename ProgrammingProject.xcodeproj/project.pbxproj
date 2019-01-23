@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DC1DFD4021B0CE46000B4B33 /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DC1DFD3F21B0CE46000B4B33 /* libcurl.tbd */; };
 		DC4686E121C70665008F4991 /* librestclient-cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4686E021C70665008F4991 /* librestclient-cpp.a */; };
 		DCC3E3F621EDA7CF00000A2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCC3E3F521EDA7CF00000A2F /* main.cpp */; };
 		DCC3E3FC21EDA83100000A2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC1DFD3721B0CDB8000B4B33 /* main.cpp */; };
@@ -56,7 +55,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC4686E121C70665008F4991 /* librestclient-cpp.a in Frameworks */,
-				DC1DFD4021B0CE46000B4B33 /* libcurl.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,7 +170,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DC1DFD2F21B0CDB8000B4B33 /* Build configuration list for PBXProject "ProgramminngProject" */;
+			buildConfigurationList = DC1DFD2F21B0CDB8000B4B33 /* Build configuration list for PBXProject "ProgrammingProject" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -375,7 +373,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DC1DFD2F21B0CDB8000B4B33 /* Build configuration list for PBXProject "ProgramminngProject" */ = {
+		DC1DFD2F21B0CDB8000B4B33 /* Build configuration list for PBXProject "ProgrammingProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DC1DFD3921B0CDB8000B4B33 /* Debug */,

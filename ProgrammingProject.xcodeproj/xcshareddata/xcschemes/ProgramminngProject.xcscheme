@@ -17,7 +17,7 @@
                BlueprintIdentifier = "DC1DFD3321B0CDB8000B4B33"
                BuildableName = "ProgramminngProject"
                BlueprintName = "ProgramminngProject"
-               ReferencedContainer = "container:ProgramminngProject.xcodeproj">
+               ReferencedContainer = "container:ProgrammingProject.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,14 +35,14 @@
             BlueprintIdentifier = "DC1DFD3321B0CDB8000B4B33"
             BuildableName = "ProgramminngProject"
             BlueprintName = "ProgramminngProject"
-            ReferencedContainer = "container:ProgramminngProject.xcodeproj">
+            ReferencedContainer = "container:ProgrammingProject.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "DC1DFD3321B0CDB8000B4B33"
             BuildableName = "ProgramminngProject"
             BlueprintName = "ProgramminngProject"
-            ReferencedContainer = "container:ProgramminngProject.xcodeproj">
+            ReferencedContainer = "container:ProgrammingProject.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -83,7 +83,7 @@
             BlueprintIdentifier = "DC1DFD3321B0CDB8000B4B33"
             BuildableName = "ProgramminngProject"
             BlueprintName = "ProgramminngProject"
-            ReferencedContainer = "container:ProgramminngProject.xcodeproj">
+            ReferencedContainer = "container:ProgrammingProject.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
