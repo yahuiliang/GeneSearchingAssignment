@@ -37,7 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		DC1DFD3421B0CDB8000B4B33 /* ProgramminngProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ProgramminngProject; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC1DFD3421B0CDB8000B4B33 /* ProgrammingProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ProgrammingProject; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC1DFD3721B0CDB8000B4B33 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DC1DFD3F21B0CE46000B4B33 /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 		DC1DFD4121B0DC16000B4B33 /* librestclient-cpp.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "librestclient-cpp.1.dylib"; path = "../../../../../usr/local/Cellar/restclient-cpp/0.4.4/lib/librestclient-cpp.1.dylib"; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 		DC1DFD2B21B0CDB8000B4B33 = {
 			isa = PBXGroup;
 			children = (
-				DC1DFD3621B0CDB8000B4B33 /* ProgramminngProject */,
+				DC1DFD3621B0CDB8000B4B33 /* ProgrammingProject */,
 				DCC3E3F421EDA7CF00000A2F /* Test */,
 				DC1DFD3521B0CDB8000B4B33 /* Products */,
 				DC1DFD3E21B0CE45000B4B33 /* Frameworks */,
@@ -81,20 +81,20 @@
 		DC1DFD3521B0CDB8000B4B33 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DC1DFD3421B0CDB8000B4B33 /* ProgramminngProject */,
+				DC1DFD3421B0CDB8000B4B33 /* ProgrammingProject */,
 				DCC3E3F321EDA7CF00000A2F /* Test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DC1DFD3621B0CDB8000B4B33 /* ProgramminngProject */ = {
+		DC1DFD3621B0CDB8000B4B33 /* ProgrammingProject */ = {
 			isa = PBXGroup;
 			children = (
 				DC1DFD3721B0CDB8000B4B33 /* main.cpp */,
 				DCFC6EC221B22E9200113524 /* Sequence.cpp */,
 				DCFC6EC321B22E9200113524 /* Sequence.hpp */,
 			);
-			path = ProgramminngProject;
+			path = ProgrammingProject;
 			sourceTree = "<group>";
 		};
 		DC1DFD3E21B0CE45000B4B33 /* Frameworks */ = {
@@ -119,9 +119,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DC1DFD3321B0CDB8000B4B33 /* ProgramminngProject */ = {
+		DC1DFD3321B0CDB8000B4B33 /* ProgrammingProject */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DC1DFD3B21B0CDB8000B4B33 /* Build configuration list for PBXNativeTarget "ProgramminngProject" */;
+			buildConfigurationList = DC1DFD3B21B0CDB8000B4B33 /* Build configuration list for PBXNativeTarget "ProgrammingProject" */;
 			buildPhases = (
 				DC1DFD3021B0CDB8000B4B33 /* Sources */,
 				DC1DFD3121B0CDB8000B4B33 /* Frameworks */,
@@ -131,9 +131,9 @@
 			);
 			dependencies = (
 			);
-			name = ProgramminngProject;
+			name = ProgrammingProject;
 			productName = ProgramminngProject;
-			productReference = DC1DFD3421B0CDB8000B4B33 /* ProgramminngProject */;
+			productReference = DC1DFD3421B0CDB8000B4B33 /* ProgrammingProject */;
 			productType = "com.apple.product-type.tool";
 		};
 		DCC3E3F221EDA7CF00000A2F /* Test */ = {
@@ -182,7 +182,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DC1DFD3321B0CDB8000B4B33 /* ProgramminngProject */,
+				DC1DFD3321B0CDB8000B4B33 /* ProgrammingProject */,
 				DCC3E3F221EDA7CF00000A2F /* Test */,
 			);
 		};
@@ -382,7 +382,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DC1DFD3B21B0CDB8000B4B33 /* Build configuration list for PBXNativeTarget "ProgramminngProject" */ = {
+		DC1DFD3B21B0CDB8000B4B33 /* Build configuration list for PBXNativeTarget "ProgrammingProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DC1DFD3C21B0CDB8000B4B33 /* Debug */,

@@ -209,14 +209,12 @@ static vector<string> gen9MerDnaABoxes(const vector<vector<char>> &gen9MerDnaAs,
 
 // The function for generating 9-mer DnaA boxes with all possibilities
 static vector<Sequence> gen9MerDnaABoxes() {
-    const static vector<vector<char>> gen9MerDnaAs = {{'T'}, {'G'}, {'T'}, {'G', 'C'}, {'A', 'G'}, {'A'}, {'T', 'C'}, {'A'}, {'T', 'A', 'C', 'G'}};
+    const static vector<vector<char>> gen9MerDnaAs = {{'T'}, {'G'}, {'T'}, {'G', 'C'}, {'G'}, {'A'}, {'T', 'C'}, {'A'}, {'T', 'A', 'C', 'G'}};
     const vector<string> boxes = gen9MerDnaABoxes(gen9MerDnaAs, 0);
     vector<Sequence> ans;
     for (string box : boxes) {
         Sequence tmp(box);
-        Sequence tmpR = -tmp;
         ans.push_back(move(tmp));
-        ans.push_back(move(tmpR));
     }
     return ans;
 }
