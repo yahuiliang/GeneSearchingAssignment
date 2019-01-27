@@ -46,8 +46,6 @@ struct Sequence {
     };
     int size() const;
     std::string getName() const;
-    // Reads the sequence from the file
-    void readSequence(const std::string & filename);
     // Convert the sequence to the string format
     std::string toString() const;
     std::string toHighlightenedString(std::vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> locations) const;

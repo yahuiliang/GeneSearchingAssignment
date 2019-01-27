@@ -12,13 +12,18 @@
          contextName = "Sequence::locate(Sequence const&amp;) const:Sequence.cpp">
       </ContextState>
       <ContextState
+         contextName = "____C_A_T_C_H____T_E_S_T____14():main.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "err.what()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "search9MerDnaABoxes(Sequence const&amp;):main.cpp">
       </ContextState>
       <ContextState
          contextName = "Sequence::readSequence(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;):Sequence.cpp">
-      </ContextState>
-      <ContextState
-         contextName = "gen9MerDnaABoxes():main.cpp">
       </ContextState>
       <ContextState
          contextName = "Sequence::size() const:Sequence.cpp">

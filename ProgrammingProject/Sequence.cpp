@@ -16,7 +16,7 @@ using namespace std;
 static char complement(char gene);
 
 Sequence::Sequence() {
-    name = "unknown name";
+    name = "unknown sequence";
 }
 
 Sequence::Sequence(const Sequence & src) {
@@ -40,7 +40,7 @@ Sequence::Sequence(Sequence && src) {
 }
 
 Sequence::Sequence(const std::string & genes) {
-    name = "unknown name";
+    name = "unknown sequence";
     for (int i = 0; i < genes.length(); ++i) {
         char gene = genes.at(i);
         sequence.push_back(gene);
@@ -231,25 +231,6 @@ std::string Sequence::getName() const {
     return name;
 }
 
-void Sequence::readSequence(const string &filename) {
-    ifstream inFile(filename);
-    // Determine if the file stream is opened successfully
-    if (inFile.is_open()) {
-        char c;
-        // Skip the first information line
-        getline(inFile, name);
-        name.erase(0, 1); // Remove '>' symbol
-        // Keep reading sequences
-        while (inFile.get(c)) {
-            if (c != '\n') {
-                sequence.push_back(c);
-                rsequence.push_back(complement(c));
-            }
-        }
-        inFile.close();
-    }
-}
-
 string Sequence::toString() const {
     string rval = "";
     int counter = 0;
@@ -340,6 +321,11 @@ Sequence::Distribution Sequence::computeDistribution() const {
 
 // If the first location is negative, this means the sequence that the function searches for is the in the reverse complementary order
 vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::locateBoxes(const set<Sequence> & boxes) const {
+    vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> rval;
+    if (boxes.empty()) {
+        return rval;
+    }
+    
     // By using the frame size, scanning through the sequence to see if the matching sequence has been found
     int frameSize = (*(boxes.begin())).size();
     if (frameSize > size()) {
@@ -348,8 +334,7 @@ vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::locateBoxes(const
     if (frameSize == 0) {
         throw invalid_argument("the size of boxes set to be located is empty");
     }
-    vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> rval;
-    bool found = false;
+    
     for (int i = 0; i < size(); ++i) {
         int start = i;
         int end = (i + frameSize) % size();
@@ -359,18 +344,6 @@ vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::locateBoxes(const
             auto po = make_tuple(start, end);
             auto rpo = make_tuple(-((size() - end) % size()) - 1, -((size() - start) % size()) - 1);
             rval.push_back(make_tuple(po, rpo));
-            found = true;
-        }
-    }
-    for (int i = -1; !found && i > -size() - 1; --i) {
-        int start = i;
-        int end = -(((-i - 1) + frameSize) % size() + 1);
-        Sequence tmp = (*this)(start, end);
-        if (boxes.find(tmp) != boxes.end()) {
-            // Here are values for recording the location range for the sub-sequence
-            auto po = make_tuple((size() + end + 1) % size(), (size() + start + 1) % size());
-            auto rpo = make_tuple(start, end);
-            rval.push_back(make_tuple(po, rpo));
         }
     }
     return rval;
@@ -379,6 +352,9 @@ vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::locateBoxes(const
 tuple<tuple<int, int>, tuple<int, int>> Sequence::locate(const Sequence & other) const {
     if (other.size() > size()) {
         throw invalid_argument("the size of the sequence to be located is greater than the src sequence");
+    }
+    if (other.size() == 0) {
+        throw invalid_argument("the other sequence is empty");
     }
     int frameSize = other.size();
     for (int i = 0; i < size(); ++i) {
