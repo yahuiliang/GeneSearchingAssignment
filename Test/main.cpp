@@ -40,6 +40,42 @@ TEST_CASE("The sequence can be initialized from the string if") {
     }
 }
 
+TEST_CASE("Sequence Reverse Complementary") {
+    SECTION("Normal sequence reverse") {
+        Sequence seq("TTATCCACA");
+        Sequence seqr = -seq;
+        REQUIRE(seq == seqr);
+        REQUIRE(seqr.getName() == seq.getName() + " reversed complementary");
+    }
+    
+    SECTION("Empty sequence reverse") {
+        Sequence seq("");
+        Sequence seqr = -seq;
+        REQUIRE(seq == seqr);
+        REQUIRE(seqr.getName() == seq.getName() + " reversed complementary");
+    }
+}
+
+TEST_CASE("Sequence Compare Operation") {
+    SECTION("Compare with longer sequence") {
+        Sequence a("A");
+        Sequence b("CT");
+        REQUIRE(a < b);
+    }
+    
+    SECTION("Compare with equal length sequence") {
+        Sequence a("AT");
+        Sequence b("CT");
+        REQUIRE(a < b);
+    }
+    
+    SECTION("Equality by using compare operator") {
+        Sequence a("CT");
+        Sequence b("CT");
+        REQUIRE((!(a < b) && !(b < a)));
+    }
+}
+
 TEST_CASE("Sequence fetching") {
     Sequence seq("TTATCCACA");
     SECTION("Single fetching") {
@@ -389,4 +425,24 @@ TEST_CASE("The sequence locate boxes if") {
         REQUIRE(start == -9);
         REQUIRE(end == -2);
     }
+}
+
+TEST_CASE("Sequence highlight string operation") {
+    Sequence seq("TGTGGATAA");
+    set<Sequence> boxes;
+    boxes.insert(Sequence("GA"));
+    boxes.insert(Sequence("AT"));
+    auto locations = seq.locateBoxes(boxes);
+    string highlightedString = seq.toHighlightenedString(locations);
+    REQUIRE(highlightedString == "TgtgGATaA");
+}
+
+TEST_CASE("Sequence distribution computation") {
+    Sequence seq("TGTGGATACT");
+    Sequence::Distribution result = seq.computeDistribution();
+    REQUIRE(result.APercent == 20);
+    REQUIRE(result.CPercent == 10);
+    REQUIRE(result.GPercent == 30);
+    REQUIRE(result.TPercent == 40);
+    REQUIRE(result.GCPercent == 40);
 }
