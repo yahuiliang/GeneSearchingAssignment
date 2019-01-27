@@ -9,7 +9,6 @@
 #include "Sequence.hpp"
 #include <iostream>
 #include <fstream>
-#include <set>
 
 using namespace std;
 
@@ -17,7 +16,7 @@ using namespace std;
 static char complement(char gene);
 
 Sequence::Sequence() {
-    name = "";
+    name = "unknown name";
 }
 
 Sequence::Sequence(const Sequence & src) {
@@ -41,13 +40,21 @@ Sequence::Sequence(Sequence && src) {
 }
 
 Sequence::Sequence(const std::string & genes) {
-    name = "";
+    name = "unknown name";
     for (int i = 0; i < genes.length(); ++i) {
         char gene = genes.at(i);
         sequence.push_back(gene);
         rsequence.push_back(complement(gene));
     }
-    name = "unknown name";
+}
+
+Sequence::Sequence(const std::string & genes, const std::string & _name) {
+    name = _name;
+    for (int i = 0; i < genes.length(); ++i) {
+        char gene = genes.at(i);
+        sequence.push_back(gene);
+        rsequence.push_back(complement(gene));
+    }
 }
 
 // The method is the absolute comparison between two sequences
@@ -79,6 +86,12 @@ bool Sequence::operator==(const Sequence & other) const {
         }
     }
     return isEqual;
+}
+
+bool Sequence::operator<(const Sequence & other) const {
+    string thisStr = toString();
+    string otherStr = other.toString();
+    return thisStr < otherStr;
 }
 
 Sequence & Sequence::operator=(Sequence && src) {
@@ -118,12 +131,6 @@ const char &Sequence::operator[](int index) const {
     }
 }
 
-Sequence &Sequence::operator+(char gene) {
-    sequence.push_back(gene);
-    rsequence.push_back(complement(gene));
-    return *this;
-}
-
 Sequence Sequence::operator()(int start, int end) const {
     if ((start < 0 && -start > size()) || start >= size()) {
         throw invalid_argument("The start index is out of range");
@@ -131,50 +138,49 @@ Sequence Sequence::operator()(int start, int end) const {
     if ((end < 0 && -end > size()) || end >= size()) {
         throw invalid_argument("The end index is out of range");
     }
-    Sequence rval;
+    string seqStr;
     if (start >= 0 && end >= 0) {
         // Keep adding values to the return sequence in the original order
         if (start < end) {
             for (int i = start; i < end; ++i) {
-                rval + (*this)[i];
+                seqStr += (*this)[i];
             }
         } else {
             for (int i = start; i < size(); ++i) {
-                rval + (*this)[i];
+                seqStr += (*this)[i];
             }
             for (int i = 0; i < end; ++i) {
-                rval + (*this)[i];
+                seqStr += (*this)[i];
             }
         }
     } else if (start < 0 && end < 0) {
         // Keep adding values to the return sequence in the reverse order
         if (start > end) {
             for (int i = start; i > end; --i) {
-                rval + (*this)[i];
+                seqStr += (*this)[i];
             }
         } else {
             for (int i = start; i >= -size(); --i) {
-                rval + (*this)[i];
+                seqStr += (*this)[i];
             }
             for (int i = -1; i > end; --i) {
-                rval + (*this)[i];
+                seqStr += (*this)[i];
             }
         }
     } else {
         throw invalid_argument("The start index and the end index should both have the same sign");
     }
-    return rval;
+    return Sequence(seqStr);
 }
 
 Sequence Sequence::operator-() const {
-    Sequence rval;
+    string seqStr;
     // Keep adding genes in the reverse order
     for (int i = 0; i < size(); ++i) {
         char gene = (*this)[-(i + 1)];
-        rval + gene;
+        seqStr += gene;
     }
-    rval.name = name + " reversed complementary";
-    return rval;
+    return Sequence(seqStr, name + " reversed complementary");
 }
 
 static char complement(char gene) {
@@ -263,9 +269,6 @@ string Sequence::toHighlightenedString(vector<tuple<tuple<int, int>, tuple<int, 
     for (tuple<tuple<int, int>, tuple<int, int>> &location : locations) {
         // Find the one corresponds to the ori sequence
         tuple<int, int> tmp = get<0>(location);
-        if (get<0>(tmp) < 0) {
-            tmp = get<1>(location);
-        }
         // Convert negative indexes to positive
         int location1 = std::get<0>(tmp);
         int location2 = std::get<1>(tmp);
@@ -336,27 +339,34 @@ Sequence::Distribution Sequence::computeDistribution() const {
 }
 
 // If the first location is negative, this means the sequence that the function searches for is the in the reverse complementary order
-vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::indexof(const Sequence & other) const {
-    if (other.size() > size()) {
-        throw invalid_argument("the size of the sequence to be located is greater than the src sequence");
+vector<tuple<std::tuple<int, int>, tuple<int, int>>> Sequence::locateBoxes(const set<Sequence> & boxes) const {
+    // By using the frame size, scanning through the sequence to see if the matching sequence has been found
+    int frameSize = (*(boxes.begin())).size();
+    if (frameSize > size()) {
+        throw invalid_argument("the size of boxes set to be located is greater than the src sequence");
+    }
+    if (frameSize == 0) {
+        throw invalid_argument("the size of boxes set to be located is empty");
     }
     vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> rval;
-    // By using the frame size, scanning through the sequence to see if the matching sequence has been found
-    int frameSize = other.size();
+    bool found = false;
     for (int i = 0; i < size(); ++i) {
         int start = i;
         int end = (i + frameSize) % size();
-        if (compareTo(other, start, end)) {
+        Sequence tmp = (*this)(start, end);
+        if (boxes.find(tmp) != boxes.end()) {
             // Here are values for recording the location range for the sub-sequence
             auto po = make_tuple(start, end);
             auto rpo = make_tuple(-((size() - end) % size()) - 1, -((size() - start) % size()) - 1);
             rval.push_back(make_tuple(po, rpo));
+            found = true;
         }
     }
-    for (int i = -1; i > -size() - 1; --i) {
+    for (int i = -1; !found && i > -size() - 1; --i) {
         int start = i;
         int end = -(((-i - 1) + frameSize) % size() + 1);
-        if (compareTo(other, start, end)) {
+        Sequence tmp = (*this)(start, end);
+        if (boxes.find(tmp) != boxes.end()) {
             // Here are values for recording the location range for the sub-sequence
             auto po = make_tuple((size() + end + 1) % size(), (size() + start + 1) % size());
             auto rpo = make_tuple(start, end);

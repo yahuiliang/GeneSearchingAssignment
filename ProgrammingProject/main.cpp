@@ -10,6 +10,7 @@
 #include "restclient-cpp/restclient.h"
 #include "Sequence.hpp"
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <curl/curl.h>
 #include <regex>
@@ -25,18 +26,60 @@ using namespace RestClient;
  * Download the gen file from the database
  * The accession number should be provided
  */
-static void downloadGenFile(const string & dest, const string &accessionNumber);
+static Sequence downloadGenFile(const string &accessionNumber);
 static void printLocation(const string &seqName, const tuple<tuple<int, int>, tuple<int, int>> location);
 static void reportRelativeLocations(const Sequence &seq, const Sequence &oriC_1, const Sequence &oriC_2, const Sequence &dnaA);
-static vector<Sequence> gen9MerDnaABoxes();
+static set<Sequence> gen9MerDnaABoxes();
 static vector<tuple<tuple<int, int>, tuple<int, int>>> search9MerDnaABoxes(const Sequence &seq);
 
-int main1() {
-    Sequence tmp1("TGTGGATADT");
-    Sequence tmp2 = -tmp1 + 'A';
-    cout << (tmp1 == tmp2) << endl;
-    return 0;
-}
+static string oriC1Str = "caggaccggggatcaatcggggaaagTGTGAATAActtttcggaagtcatacacagtctg"
+                         "tccacaTGTGGATAGgctgtgtttcctgtctttttcacaacTTATCCACAaatccacagg"
+                         "ccctactattacttctactattttttataaatatatatattaatacattatccgttagga"
+                         "ggataaaa";
+
+static string oriC2Str = "ttatgacacctccctcgaggaatagctgttaaagacagtcttacttattatatttgcgtt"
+                         "acctattcattgtcaacttcactagtgcttttatttcttgcaaccataataggataccat"
+                         "accttttcaactttcgaaaccttattttttagattccttaattttacggaaaaaagacaa"
+                         "attcaaacaatttgcccctaaaatcacgcaTGTGGATATctttttcggctttttttaGTA"
+                         "TCCACAgaggTTATCGACAacattttcacattaccaaccccTGTGGACAAggttttttca"
+                         "acaggttgtccgcttTGTGGATAAgattgtgacaaccattgcaagctctcgtttattttg"
+                         "gtattatatttgtgttttaactcttgattactaatcctacctttcctctTTATCCACAaa"
+                         "gTGTGGATAAgttgtggattgatttcacacagcttgtgtagaaggTTGTCCACAagttgt"
+                         "gaaatttgtcgaaaagctatttatctactatattatatgttttcaacatttaatgtgtac"
+                         "gaatggtaagcgccatttgctctttttttgtgttctataacagagaaagacgccattttc"
+                         "taagaaaaggagggacgtgccggaag"
+"ttatgacacctccctcgaggaatagctgttaaagacagtcttacttattatatttgcgtt"
+"acctattcattgtcaacttcactagtgcttttatttcttgcaaccataataggataccat"
+"accttttcaactttcgaaaccttattttttagattccttaattttacggaaaaaagacaa"
+"attcaaacaatttgcccctaaaatcacgcaTGTGGATATctttttcggctttttttaGTA"
+"TCCACAgaggTTATCGACAacattttcacattaccaaccccTGTGGACAAggttttttca"
+"acaggttgtccgcttTGTGGATAAgattgtgacaaccattgcaagctctcgtttattttg"
+"gtattatatttgtgttttaactcttgattactaatcctacctttcctctTTATCCACAaa"
+"gTGTGGATAAgttgtggattgatttcacacagcttgtgtagaaggTTGTCCACAagttgt"
+"gaaatttgtcgaaaagctatttatctactatattatatgttttcaacatttaatgtgtac"
+"gaatggtaagcgccatttgctctttttttgtgttctataacagagaaagacgccattttc"
+"taagaaaaggagggacgtgccggaag";
+
+static string dnaAStr = "ATGGAAAATATATTAGACCTGTGGAACCAAGCCCTTGCTCAAATCGAAAAAAAGTTGAGCAAACCGAGTT"
+                        "TTGAGACTTGGATGAAGTCAACCAAAGCCCACTCACTGCAAGGCGATACATTAACAATCACGGCTCCCAA"
+                        "TGAATTTGCCAGAGACTGGCTGGAGTCCAGATACTTGCATCTGATTGCAGATACTATATATGAATTAACC"
+                        "GGGGAAGAATTGAGCATTAAGTTTGTCATTCCTCAAAATCAAGATGTTGAGGACTTTATGCCGAAACCGC"
+                        "AAGTCAAAAAAGCGGTCAAAGAAGATACATCTGATTTTCCTCAAAATATGCTCAATCCAAAATATACTTT"
+                        "TGATACTTTTGTCATCGGATCTGGAAACCGATTTGCACATGCTGCTTCCCTCGCAGTAGCGGAAGCGCCC"
+                        "GCGAAAGCTTACAACCCTTTATTTATCTATGGGGGCGTCGGCTTAGGGAAAACACACTTAATGCATGCGA"
+                        "TCGGCCATTATGTAATAGATCATAATCCTTCTGCCAAAGTGGTTTATCTGTCTTCTGAGAAATTTACAAA"
+                        "CGAATTCATCAACTCTATCCGAGATAATAAAGCCGTCGACTTCCGCAATCGCTATCGAAATGTTGATGTG"
+                        "CTTTTGATAGATGATATTCAATTTTTAGCGGGGAAAGAACAAACCCAGGAAGAATTTTTCCATACATTTA"
+                        "ACACATTACACGAAGAAAGCAAACAAATCGTCATTTCAAGTGACCGGCCGCCAAAGGAAATTCCGACACT"
+                        "TGAAGACAGATTGCGCTCACGTTTTGAATGGGGACTTATTACAGATATCACACCGCCTGATCTAGAAACG"
+                        "AGAATTGCAATTTTAAGAAAAAAGGCCAAAGCAGAGGGCCTCGATATTCCGAACGAGGTTATGCTTTACA"
+                        "TCGCGAATCAAATCGACAGCAATATTCGGGAACTCGAAGGAGCATTAATCAGAGTTGTCGCTTATTCATC"
+                        "TTTAATTAATAAAGATATTAATGCTGATCTGGCCGCTGAGGCGTTGAAAGATATTATTCCTTCCTCAAAA"
+                        "CCGAAAGTCATTACGATAAAAGAAATTCAGAGGGTAGTAGGCCAGCAATTTAATATTAAACTCGAGGATT"
+                        "TCAAAGCAAAAAAACGGACAAAGTCAGTAGCTTTTCCGCGTCAAATCGCCATGTACTTATCAAGGGAAAT"
+                        "GACTGATTCCTCTCTTCCTAAAATCGGTGAAGAGTTTGGAGGACGTGATCATACGACCGTTATTCATGCG"
+                        "CATGAAAAAATTTCAAAACTGCTGGCAGATGATGAACAGCTTCAGCAGCATGTAAAAGAAATTAAAGAAC"
+                        "AGCTTAAATAG";
 
 #warning the vector data structure may be switched to others to maximize the performance
 #warning how to determine which part is the oriC sequence. By hardcoding?
@@ -53,31 +96,16 @@ int main(int argc, const char * argv[]) {
     
     // Get the accession number
     string accessionnNumber(argv[1]);
-    
-    string baseDir = "genes/";
-    
-    // Download the gen file
-    // The file is downloaded to the same directory as the executable binary
-    // Check if the file has existed
-    // If not, install the file from the database
-    ifstream sequenceFile(baseDir + "sequence.fasta");
-    if (!((bool)sequenceFile)) {
-        downloadGenFile(baseDir + "sequence.fasta", accessionnNumber);
-    }
-    
+
     auto start = high_resolution_clock::now();
-    // Read the sequence from the file
-    Sequence sequence;
-    sequence.readSequence(baseDir + "sequence.fasta");
+    // Download the sequence
+    Sequence sequence = downloadGenFile(accessionnNumber);
     // Read the oriC_1 sequence from the file
-    Sequence oriC_1;
-    oriC_1.readSequence(baseDir + "oriC_1.fasta");
+    Sequence oriC_1(oriC1Str, "oriC_1 of B. subtilis subsp. subtilis str. 168, NC_000964.3");
     // Read the oriC_2 sequence from the file
-    Sequence oriC_2;
-    oriC_2.readSequence(baseDir + "oriC_2.fasta");
+    Sequence oriC_2(oriC2Str, "oriC_2 of B. subtilis subsp. subtilis str. 168, NC_000964.3");
     // Read the dnaA sequence from the file
-    Sequence dnaA;
-    dnaA.readSequence(baseDir + "dnaA.fasta");
+    Sequence dnaA(dnaAStr, "dnaA gene of B subtilis subsp. subtilis str. 168");
     
     // Sync the start index of the sequence
     sequence.syncStart(oriC_1);
@@ -154,7 +182,7 @@ static void printLocation(const string &seqName, const tuple<tuple<int, int>, tu
     cout << "start:" << start << " end:" << end << " (reverse complementary)" << endl;
 }
 
-static void downloadGenFile(const string & dest, const string &accessionNumber) {
+static Sequence downloadGenFile(const string &accessionNumber) {
     // Send the HTTP GET request to download the file
     cout << "downloading the gene file..." << endl;
     char tmp[500];
@@ -169,15 +197,21 @@ static void downloadGenFile(const string & dest, const string &accessionNumber) 
     regex_search(contentDispositionField, m, filenameRegex);
     auto itr = m.begin() + 1;
     string filename = *itr;
-    // Write the file body to the local disk
-    ofstream genFile(dest.c_str());
-    if (!genFile.is_open()) {
-        cout << "The gene file cannot be written to the disk" << endl;
-        exit(EXIT_FAILURE);
-    }
-    genFile << r.body << endl;
-    genFile.close();
     cout << filename << " is downloaded" << endl;
+    istringstream f(r.body);
+    string name;
+    getline(f, name);
+    name.erase(0, 1);
+
+    char c;
+    string seqStr;
+    while (f.get(c)) {
+        if (c != '\n') {
+            seqStr += c;
+        }
+    }
+    
+    return Sequence(seqStr, name);
 }
 
 // The recursive function for generating 9-mer DnaA boxes with all possibilities
@@ -208,26 +242,26 @@ static vector<string> gen9MerDnaABoxes(const vector<vector<char>> &gen9MerDnaAs,
 }
 
 // The function for generating 9-mer DnaA boxes with all possibilities
-static vector<Sequence> gen9MerDnaABoxes() {
+static set<Sequence> gen9MerDnaABoxes() {
     const static vector<vector<char>> gen9MerDnaAs = {{'T'}, {'G'}, {'T'}, {'G', 'C'}, {'G'}, {'A'}, {'T', 'C'}, {'A'}, {'T', 'A', 'C', 'G'}};
     const vector<string> boxes = gen9MerDnaABoxes(gen9MerDnaAs, 0);
-    vector<Sequence> ans;
+    set<Sequence> ans;
     for (string box : boxes) {
         Sequence tmp(box);
-        ans.push_back(move(tmp));
+        Sequence tmpr = -tmp;
+        ans.insert(move(tmp));
+        ans.insert(move(tmpr));
     }
     return ans;
 }
 
 static vector<tuple<tuple<int, int>, tuple<int, int>>> search9MerDnaABoxes(const Sequence &seq) {
-    vector<Sequence> boxes = gen9MerDnaABoxes();
+    set<Sequence> boxes = gen9MerDnaABoxes();
     // Search for 9-mer boxes in oriC
     vector<tuple<tuple<int, int>, tuple<int, int>>> locations;
-    for (Sequence &box : boxes) {
-        vector<tuple<tuple<int, int>, tuple<int, int>>> tmps = seq.indexof(box);
-        for (tuple<tuple<int, int>, tuple<int, int>> tmp : tmps) {
-            locations.push_back(tmp);
-        }
+    vector<tuple<tuple<int, int>, tuple<int, int>>> tmps = seq.locateBoxes(boxes);
+    for (tuple<tuple<int, int>, tuple<int, int>> tmp : tmps) {
+        locations.push_back(tmp);
     }
     return locations;
 }

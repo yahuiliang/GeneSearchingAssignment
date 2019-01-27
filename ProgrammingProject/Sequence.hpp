@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include <list>
+#include <set>
 #include <tuple>
 #include <string>
 
@@ -21,14 +21,16 @@ struct Sequence {
     Sequence(const Sequence & src); // The copy constructor for the sequence
     Sequence(Sequence && src); // The move constructor of the sequence
     Sequence(const std::string & genes);
+    Sequence(const std::string & genes, const std::string & name);
     // Overriden operators
     Sequence & operator=(Sequence && src);
     Sequence & operator=(const Sequence & src);
     bool operator==(const Sequence & other) const;
+    bool operator<(const Sequence & other) const;
     // The function will push an element to the sequence. The reference to itself will be returned. The returned value can be
     // assigned to either the new object or the referece of the object.
     // The time complexity for pushing the element to the sequence is O(n).
-    Sequence & operator+(char gene);
+//    Sequence & operator+(char gene);
     Sequence operator-() const; // The function should be the reverse complement sequence
     // This is mainly for getting the single gene from the sequence
     // If the index overflows, the index will start from zero
@@ -58,15 +60,19 @@ struct Sequence {
     // (0, 0) will be returned if there is no frame matching with the sequence
     // The base of the index is 0
     // The difference between `indexof` and `locate` is that `locate` only return the location of the first occurence
-    std::vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> indexof(const Sequence & other) const;
+    // boxes should be made sure that they are all in the same order
+    std::vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> locateBoxes(const std::set<Sequence> & boxes) const;
     std::tuple<std::tuple<int, int>, std::tuple<int, int>> locate(const Sequence & other) const;
     // The method is for synchronizing the start of the sequence
     // If no sequence matched with the provided one, the startIndex will remain same
     int syncStart(const Sequence & oriC);
 private:
     std::string name;
+    
+    // Double-strands sequence is immutable
     std::vector<char> sequence;
     std::vector<char> rsequence;
+    
     int startIndex = 0;
     int startIndexR = 0;
 
