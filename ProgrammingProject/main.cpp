@@ -47,18 +47,7 @@ static string oriC2Str = "ttatgacacctccctcgaggaatagctgttaaagacagtcttacttattatatt
                          "gTGTGGATAAgttgtggattgatttcacacagcttgtgtagaaggTTGTCCACAagttgt"
                          "gaaatttgtcgaaaagctatttatctactatattatatgttttcaacatttaatgtgtac"
                          "gaatggtaagcgccatttgctctttttttgtgttctataacagagaaagacgccattttc"
-                         "taagaaaaggagggacgtgccggaag"
-"ttatgacacctccctcgaggaatagctgttaaagacagtcttacttattatatttgcgtt"
-"acctattcattgtcaacttcactagtgcttttatttcttgcaaccataataggataccat"
-"accttttcaactttcgaaaccttattttttagattccttaattttacggaaaaaagacaa"
-"attcaaacaatttgcccctaaaatcacgcaTGTGGATATctttttcggctttttttaGTA"
-"TCCACAgaggTTATCGACAacattttcacattaccaaccccTGTGGACAAggttttttca"
-"acaggttgtccgcttTGTGGATAAgattgtgacaaccattgcaagctctcgtttattttg"
-"gtattatatttgtgttttaactcttgattactaatcctacctttcctctTTATCCACAaa"
-"gTGTGGATAAgttgtggattgatttcacacagcttgtgtagaaggTTGTCCACAagttgt"
-"gaaatttgtcgaaaagctatttatctactatattatatgttttcaacatttaatgtgtac"
-"gaatggtaagcgccatttgctctttttttgtgttctataacagagaaagacgccattttc"
-"taagaaaaggagggacgtgccggaag";
+                         "taagaaaaggagggacgtgccggaag";
 
 static string dnaAStr = "ATGGAAAATATATTAGACCTGTGGAACCAAGCCCTTGCTCAAATCGAAAAAAAGTTGAGCAAACCGAGTT"
                         "TTGAGACTTGGATGAAGTCAACCAAAGCCCACTCACTGCAAGGCGATACATTAACAATCACGGCTCCCAA"
@@ -81,18 +70,12 @@ static string dnaAStr = "ATGGAAAATATATTAGACCTGTGGAACCAAGCCCTTGCTCAAATCGAAAAAAAGT
                         "CATGAAAAAATTTCAAAACTGCTGGCAGATGATGAACAGCTTCAGCAGCATGTAAAAGAAATTAAAGAAC"
                         "AGCTTAAATAG";
 
-#warning the vector data structure may be switched to others to maximize the performance
-#warning how to determine which part is the oriC sequence. By hardcoding?
 int main(int argc, const char * argv[]) {
     // Determine if the number of arguments is valid
     if (argc < 2) {
         cout << "The program accepts the accession number" << endl;
         exit(EXIT_FAILURE);
     }
-    
-    // Redirect the output
-    //    ofstream out("out.txt");
-    //    cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
     
     // Get the accession number
     string accessionnNumber(argv[1]);

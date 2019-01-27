@@ -408,16 +408,8 @@ int Sequence::syncStart(const Sequence &oriC) {
     tuple<int, int> startLocatoin = std::get<0>(locate(oriC));
     if (std::get<0>(startLocatoin) != size() && std::get<1>(startLocatoin) != size()) {
         int start = std::get<0>(startLocatoin);
-        int end = std::get<1>(startLocatoin);
-        if (start < 0) {
-            // The reverse complementary order
-            startIndexR = -end - 1;
-            startIndex = size() + end;
-        } else {
-            // The normal order
-            startIndex = start;
-            startIndexR = size() - start;
-        }
+        startIndex = start;
+        startIndexR = size() - start;
     }
     return startIndex;
 }

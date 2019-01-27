@@ -67,7 +67,6 @@ TEST_CASE("The sequence locate the other sequence at the right location") {
         SECTION("Without reverse complementary") {
             Sequence other("TC");
             auto location = src.locate(other);
-            
         }
         SECTION("With reverse complementary") {
             

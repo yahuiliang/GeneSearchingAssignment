@@ -27,10 +27,6 @@ struct Sequence {
     Sequence & operator=(const Sequence & src);
     bool operator==(const Sequence & other) const;
     bool operator<(const Sequence & other) const;
-    // The function will push an element to the sequence. The reference to itself will be returned. The returned value can be
-    // assigned to either the new object or the referece of the object.
-    // The time complexity for pushing the element to the sequence is O(n).
-//    Sequence & operator+(char gene);
     Sequence operator-() const; // The function should be the reverse complement sequence
     // This is mainly for getting the single gene from the sequence
     // If the index overflows, the index will start from zero
