@@ -9,6 +9,7 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 
 #include "Sequence.hpp"
+#include "DnaABoxesGenerator.hpp"
 #include "catch.hpp"
 #include <set>
 #include <iostream>
@@ -38,6 +39,31 @@ TEST_CASE("The sequence can be initialized from the string if") {
         REQUIRE(seq.toString() == "");
         REQUIRE(seq.getName() == "unknown sequence");
     }
+}
+
+TEST_CASE("Copy Operation") {
+    Sequence a("TTATCCACA");
+    Sequence b = a;
+    REQUIRE(a == b);
+    Sequence c;
+    c = a;
+    REQUIRE(a == c);
+}
+
+TEST_CASE("Move Operation") {
+    Sequence a("TTATCCACA");
+    Sequence b = move(a);
+    REQUIRE(b.size() == 9);
+    REQUIRE(b.toString() == "TTATCCACA");
+    REQUIRE(a.size() == 0);
+    REQUIRE(a.toString() == "");
+    a = Sequence("TTATCCACA");
+    Sequence c;
+    c = move(a);
+    REQUIRE(c.size() == 9);
+    REQUIRE(c.toString() == "TTATCCACA");
+    REQUIRE(a.size() == 0);
+    REQUIRE(a.toString() == "");
 }
 
 TEST_CASE("Sequence Reverse Complementary") {
@@ -429,12 +455,21 @@ TEST_CASE("The sequence locate boxes if") {
 
 TEST_CASE("Sequence highlight string operation") {
     Sequence seq("TGTGGATAA");
-    set<Sequence> boxes;
-    boxes.insert(Sequence("GA"));
-    boxes.insert(Sequence("AT"));
-    auto locations = seq.locateBoxes(boxes);
-    string highlightedString = seq.toHighlightenedString(locations);
-    REQUIRE(highlightedString == "TgtgGATaA");
+    SECTION("General Case") {
+        set<Sequence> boxes;
+        boxes.insert(Sequence("GA"));
+        boxes.insert(Sequence("AT"));
+        auto locations = seq.locateBoxes(boxes);
+        string highlightedString = seq.toHighlightenedString(locations);
+        REQUIRE(highlightedString == "TgtgGATaA");
+    }
+    
+    SECTION("The reversed order location") {
+        vector<tuple<tuple<int, int>, tuple<int, int>>> locations;
+        locations.push_back(make_tuple(make_tuple(7, 2), make_tuple(-8, -3)));
+        string highlightedString = seq.toHighlightenedString(locations);
+        REQUIRE(highlightedString == "TGtggatAA");
+    }
 }
 
 TEST_CASE("Sequence distribution computation") {
@@ -445,4 +480,24 @@ TEST_CASE("Sequence distribution computation") {
     REQUIRE(result.GPercent == 30);
     REQUIRE(result.TPercent == 40);
     REQUIRE(result.GCPercent == 40);
+}
+
+TEST_CASE("Generate DNA boxes") {
+    auto boxes = gen9MerDnaABoxes();
+    Sequence seq("TGTGGATAT");
+    REQUIRE(boxes.find(seq) != boxes.end());
+    seq = Sequence("GTATCCACA");
+    REQUIRE(boxes.find(seq) != boxes.end());
+    seq = Sequence("TTATCGACA");
+    REQUIRE(boxes.find(seq) != boxes.end());
+    seq = Sequence("TGTGGACAA");
+    REQUIRE(boxes.find(seq) != boxes.end());
+    seq = Sequence("TGTGGATAA");
+    REQUIRE(boxes.find(seq) != boxes.end());
+    seq = Sequence("TTATCCACA");
+    REQUIRE(boxes.find(seq) != boxes.end());
+    seq = Sequence("TGTGGATAA");
+    REQUIRE(boxes.find(seq) != boxes.end());
+    seq = Sequence("TGTGGATAG");
+    REQUIRE(boxes.find(seq) != boxes.end());
 }

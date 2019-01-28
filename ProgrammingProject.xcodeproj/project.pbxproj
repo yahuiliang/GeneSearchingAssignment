@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DC4686E121C70665008F4991 /* librestclient-cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4686E021C70665008F4991 /* librestclient-cpp.a */; };
+		DC7E185A21FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7E185821FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp */; };
+		DC7E185B21FE8D520006E2E8 /* DnaABoxesGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7E185821FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp */; };
 		DCC3E3F621EDA7CF00000A2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCC3E3F521EDA7CF00000A2F /* main.cpp */; };
 		DCC3E3FC21EDA83100000A2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC1DFD3721B0CDB8000B4B33 /* main.cpp */; };
 		DCC3E3FF21EDAEDC00000A2F /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCFC6EC221B22E9200113524 /* Sequence.cpp */; };
@@ -42,6 +44,8 @@
 		DC1DFD3F21B0CE46000B4B33 /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 		DC1DFD4121B0DC16000B4B33 /* librestclient-cpp.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "librestclient-cpp.1.dylib"; path = "../../../../../usr/local/Cellar/restclient-cpp/0.4.4/lib/librestclient-cpp.1.dylib"; sourceTree = "<group>"; };
 		DC4686E021C70665008F4991 /* librestclient-cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librestclient-cpp.a"; path = "../../../../../usr/local/Cellar/restclient-cpp/0.4.4/lib/librestclient-cpp.a"; sourceTree = "<group>"; };
+		DC7E185821FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DnaABoxesGenerator.cpp; sourceTree = "<group>"; };
+		DC7E185921FE8C3D0006E2E8 /* DnaABoxesGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DnaABoxesGenerator.hpp; sourceTree = "<group>"; };
 		DCC3E3F321EDA7CF00000A2F /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCC3E3F521EDA7CF00000A2F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DCC3E3FA21EDA7F800000A2F /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
@@ -91,6 +95,8 @@
 			isa = PBXGroup;
 			children = (
 				DC1DFD3721B0CDB8000B4B33 /* main.cpp */,
+				DC7E185821FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp */,
+				DC7E185921FE8C3D0006E2E8 /* DnaABoxesGenerator.hpp */,
 				DCFC6EC221B22E9200113524 /* Sequence.cpp */,
 				DCFC6EC321B22E9200113524 /* Sequence.hpp */,
 			);
@@ -195,6 +201,7 @@
 			files = (
 				DCC3E3FC21EDA83100000A2F /* main.cpp in Sources */,
 				DCFC6EC421B22E9200113524 /* Sequence.cpp in Sources */,
+				DC7E185A21FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +209,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC7E185B21FE8D520006E2E8 /* DnaABoxesGenerator.cpp in Sources */,
 				DCC3E3FF21EDAEDC00000A2F /* Sequence.cpp in Sources */,
 				DCC3E3F621EDA7CF00000A2F /* main.cpp in Sources */,
 			);
