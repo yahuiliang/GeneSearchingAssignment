@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		DC7E185A21FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7E185821FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp */; };
 		DC7E185B21FE8D520006E2E8 /* DnaABoxesGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC7E185821FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp */; };
-		DC7E185E21FE97E50006E2E8 /* librestclient-cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC7E185D21FE97E50006E2E8 /* librestclient-cpp.a */; };
+		DC7E186321FEBC0A0006E2E8 /* librestclient-cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC7E186221FEBC0A0006E2E8 /* librestclient-cpp.a */; };
 		DCC3E3F621EDA7CF00000A2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCC3E3F521EDA7CF00000A2F /* main.cpp */; };
 		DCC3E3FC21EDA83100000A2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC1DFD3721B0CDB8000B4B33 /* main.cpp */; };
 		DCC3E3FF21EDAEDC00000A2F /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCFC6EC221B22E9200113524 /* Sequence.cpp */; };
@@ -46,7 +46,8 @@
 		DC4686E021C70665008F4991 /* librestclient-cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librestclient-cpp.a"; path = "../../../../../usr/local/Cellar/restclient-cpp/0.4.4/lib/librestclient-cpp.a"; sourceTree = "<group>"; };
 		DC7E185821FE8C3D0006E2E8 /* DnaABoxesGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DnaABoxesGenerator.cpp; sourceTree = "<group>"; };
 		DC7E185921FE8C3D0006E2E8 /* DnaABoxesGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DnaABoxesGenerator.hpp; sourceTree = "<group>"; };
-		DC7E185D21FE97E50006E2E8 /* librestclient-cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "librestclient-cpp.a"; sourceTree = "<group>"; };
+		DC7E186021FEBBE50006E2E8 /* librestclient-cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librestclient-cpp.a"; path = "libs/bin/librestclient-cpp.a"; sourceTree = "<group>"; };
+		DC7E186221FEBC0A0006E2E8 /* librestclient-cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "librestclient-cpp.a"; path = "bin/librestclient-cpp.a"; sourceTree = "<group>"; };
 		DCC3E3F321EDA7CF00000A2F /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCC3E3F521EDA7CF00000A2F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DCC3E3FA21EDA7F800000A2F /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
@@ -59,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC7E185E21FE97E50006E2E8 /* librestclient-cpp.a in Frameworks */,
+				DC7E186321FEBC0A0006E2E8 /* librestclient-cpp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				DC4686E021C70665008F4991 /* librestclient-cpp.a */,
+				DC7E186021FEBBE50006E2E8 /* librestclient-cpp.a */,
 				DC1DFD4121B0DC16000B4B33 /* librestclient-cpp.1.dylib */,
 				DC1DFD3F21B0CE46000B4B33 /* libcurl.tbd */,
 			);
@@ -118,7 +120,7 @@
 		DC7E185C21FE97C50006E2E8 /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				DC7E185D21FE97E50006E2E8 /* librestclient-cpp.a */,
+				DC7E186221FEBC0A0006E2E8 /* librestclient-cpp.a */,
 			);
 			path = libs;
 			sourceTree = "<group>";
@@ -349,6 +351,7 @@
 					"$(inherited)",
 					"/usr/local/Cellar/restclient-cpp/0.4.4/lib",
 					"$(PROJECT_DIR)/libs",
+					"$(PROJECT_DIR)/libs/bin",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "/usr/local/Cellar/restclient-cpp/0.4.4/include/";
@@ -364,6 +367,7 @@
 					"$(inherited)",
 					"/usr/local/Cellar/restclient-cpp/0.4.4/lib",
 					"$(PROJECT_DIR)/libs",
+					"$(PROJECT_DIR)/libs/bin",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "/usr/local/Cellar/restclient-cpp/0.4.4/include/";
