@@ -1,0 +1,98 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../libs/include/restclient-cpp/connection.h
+curl/curl.h
+-
+string
+-
+map
+-
+cstdlib
+-
+restclient-cpp/restclient.h
+../libs/include/restclient-cpp/restclient-cpp/restclient.h
+restclient-cpp/version.h
+../libs/include/restclient-cpp/restclient-cpp/version.h
+
+../libs/include/restclient-cpp/restclient.h
+curl/curl.h
+-
+string
+-
+map
+-
+cstdlib
+-
+restclient-cpp/version.h
+../libs/include/restclient-cpp/restclient-cpp/version.h
+
+../libs/include/restclient-cpp/version.h
+
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/DnaABoxesGenerator.cpp
+DnaABoxesGenerator.hpp
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/DnaABoxesGenerator.hpp
+
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/DnaABoxesGenerator.hpp
+Sequence.hpp
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/Sequence.hpp
+stdio.h
+-
+vector
+-
+set
+-
+string
+-
+
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/Sequence.cpp
+Sequence.hpp
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/Sequence.hpp
+iostream
+-
+fstream
+-
+
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/Sequence.hpp
+stdio.h
+-
+vector
+-
+set
+-
+tuple
+-
+string
+-
+
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/main.cpp
+restclient-cpp/connection.h
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/restclient-cpp/connection.h
+restclient-cpp/restclient.h
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/restclient-cpp/restclient.h
+Sequence.hpp
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/Sequence.hpp
+DnaABoxesGenerator.hpp
+/Users/liangy/Documents/Senior Design/ProgrammingProject/ProgrammingProject/DnaABoxesGenerator.hpp
+iostream
+-
+sstream
+-
+fstream
+-
+curl/curl.h
+-
+regex
+-
+vector
+-
+tuple
+-
+chrono
+-
+

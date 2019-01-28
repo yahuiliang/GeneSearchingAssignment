@@ -1,0 +1,21 @@
+Start testing: Jan 27 23:59 CST
+----------------------------------------------------------
+1/1 Testing: SequenceTests
+1/1 Test: SequenceTests
+Command: "/Users/liangy/Documents/Senior Design/ProgrammingProject/bin/Test"
+Directory: /Users/liangy/Documents/Senior Design/ProgrammingProject/bin
+"SequenceTests" start time: Jan 27 23:59 CST
+Output:
+----------------------------------------------------------
+===============================================================================
+All tests passed (116 assertions in 12 test cases)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"SequenceTests" end time: Jan 27 23:59 CST
+"SequenceTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jan 27 23:59 CST
