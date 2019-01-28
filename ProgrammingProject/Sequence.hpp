@@ -51,10 +51,6 @@ struct Sequence {
     std::string toHighlightenedString(std::vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> locations) const;
     // Scan the sequence and compute the composition
     Distribution computeDistribution() const;
-    // (0, 0) will be returned if there is no frame matching with the sequence
-    // The base of the index is 0
-    // The difference between `indexof` and `locate` is that `locate` only return the location of the first occurence
-    // boxes should be made sure that they are all in the same order
     std::vector<std::tuple<std::tuple<int, int>, std::tuple<int, int>>> locateBoxes(const std::set<Sequence> & boxes) const;
     std::tuple<std::tuple<int, int>, std::tuple<int, int>> locate(const Sequence & other) const;
     // The method is for synchronizing the start of the sequence

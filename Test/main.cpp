@@ -102,6 +102,24 @@ TEST_CASE("Sequence Compare Operation") {
     }
 }
 
+TEST_CASE("Index synchronizing") {
+    SECTION("Without reversed complementary") {
+        Sequence seq("TTATCCACA");
+        Sequence oriC("ACATT");
+        seq.syncStart(oriC);
+        Sequence result = seq(0, 0);
+        REQUIRE(result.toString() == "ACATTATCC");
+    }
+    
+    SECTION("With reversed complementary") {
+        Sequence seq("TTATCCACA");
+        Sequence oriC("AATGT");
+        seq.syncStart(oriC);
+        Sequence result = seq(0, 0);
+        REQUIRE(result.toString() == "ACATTATCC");
+    }
+}
+
 TEST_CASE("Sequence fetching") {
     Sequence seq("TTATCCACA");
     SECTION("Single fetching") {
