@@ -32,43 +32,46 @@ static void printLocation(const string &seqName, const tuple<tuple<int, int>, tu
 static void reportRelativeLocations(const Sequence &seq, const Sequence &oriC_1, const Sequence &oriC_2, const Sequence &dnaA);
 static vector<tuple<tuple<int, int>, tuple<int, int>>> search9MerDnaABoxes(const Sequence &seq);
 
-static string oriC1Str = "caggaccggggatcaatcggggaaagTGTGAATAActtttcggaagtcatacacagtctg"
-                         "tccacaTGTGGATAGgctgtgtttcctgtctttttcacaacTTATCCACAaatccacagg"
-                         "ccctactattacttctactattttttataaatatatatattaatacattatccgttagga"
-                         "ggataaaa";
+static string oriC1Str =
+"caggaccggggatcaatcggggaaagTGTGAATAActtttcggaagtcatacacagtctg"
+"tccacaTGTGGATAGgctgtgtttcctgtctttttcacaacTTATCCACAaatccacagg"
+"ccctactattacttctactattttttataaatatatatattaatacattatccgttagga"
+"ggataaaa";
 
-static string oriC2Str = "ttatgacacctccctcgaggaatagctgttaaagacagtcttacttattatatttgcgtt"
-                         "acctattcattgtcaacttcactagtgcttttatttcttgcaaccataataggataccat"
-                         "accttttcaactttcgaaaccttattttttagattccttaattttacggaaaaaagacaa"
-                         "attcaaacaatttgcccctaaaatcacgcaTGTGGATATctttttcggctttttttaGTA"
-                         "TCCACAgaggTTATCGACAacattttcacattaccaaccccTGTGGACAAggttttttca"
-                         "acaggttgtccgcttTGTGGATAAgattgtgacaaccattgcaagctctcgtttattttg"
-                         "gtattatatttgtgttttaactcttgattactaatcctacctttcctctTTATCCACAaa"
-                         "gTGTGGATAAgttgtggattgatttcacacagcttgtgtagaaggTTGTCCACAagttgt"
-                         "gaaatttgtcgaaaagctatttatctactatattatatgttttcaacatttaatgtgtac"
-                         "gaatggtaagcgccatttgctctttttttgtgttctataacagagaaagacgccattttc"
-                         "taagaaaaggagggacgtgccggaag";
+static string oriC2Str =
+"ttatgacacctccctcgaggaatagctgttaaagacagtcttacttattatatttgcgtt"
+"acctattcattgtcaacttcactagtgcttttatttcttgcaaccataataggataccat"
+"accttttcaactttcgaaaccttattttttagattccttaattttacggaaaaaagacaa"
+"attcaaacaatttgcccctaaaatcacgcaTGTGGATATctttttcggctttttttaGTA"
+"TCCACAgaggTTATCGACAacattttcacattaccaaccccTGTGGACAAggttttttca"
+"acaggttgtccgcttTGTGGATAAgattgtgacaaccattgcaagctctcgtttattttg"
+"gtattatatttgtgttttaactcttgattactaatcctacctttcctctTTATCCACAaa"
+"gTGTGGATAAgttgtggattgatttcacacagcttgtgtagaaggTTGTCCACAagttgt"
+"gaaatttgtcgaaaagctatttatctactatattatatgttttcaacatttaatgtgtac"
+"gaatggtaagcgccatttgctctttttttgtgttctataacagagaaagacgccattttc"
+"taagaaaaggagggacgtgccggaag";
 
-static string dnaAStr = "ATGGAAAATATATTAGACCTGTGGAACCAAGCCCTTGCTCAAATCGAAAAAAAGTTGAGCAAACCGAGTT"
-                        "TTGAGACTTGGATGAAGTCAACCAAAGCCCACTCACTGCAAGGCGATACATTAACAATCACGGCTCCCAA"
-                        "TGAATTTGCCAGAGACTGGCTGGAGTCCAGATACTTGCATCTGATTGCAGATACTATATATGAATTAACC"
-                        "GGGGAAGAATTGAGCATTAAGTTTGTCATTCCTCAAAATCAAGATGTTGAGGACTTTATGCCGAAACCGC"
-                        "AAGTCAAAAAAGCGGTCAAAGAAGATACATCTGATTTTCCTCAAAATATGCTCAATCCAAAATATACTTT"
-                        "TGATACTTTTGTCATCGGATCTGGAAACCGATTTGCACATGCTGCTTCCCTCGCAGTAGCGGAAGCGCCC"
-                        "GCGAAAGCTTACAACCCTTTATTTATCTATGGGGGCGTCGGCTTAGGGAAAACACACTTAATGCATGCGA"
-                        "TCGGCCATTATGTAATAGATCATAATCCTTCTGCCAAAGTGGTTTATCTGTCTTCTGAGAAATTTACAAA"
-                        "CGAATTCATCAACTCTATCCGAGATAATAAAGCCGTCGACTTCCGCAATCGCTATCGAAATGTTGATGTG"
-                        "CTTTTGATAGATGATATTCAATTTTTAGCGGGGAAAGAACAAACCCAGGAAGAATTTTTCCATACATTTA"
-                        "ACACATTACACGAAGAAAGCAAACAAATCGTCATTTCAAGTGACCGGCCGCCAAAGGAAATTCCGACACT"
-                        "TGAAGACAGATTGCGCTCACGTTTTGAATGGGGACTTATTACAGATATCACACCGCCTGATCTAGAAACG"
-                        "AGAATTGCAATTTTAAGAAAAAAGGCCAAAGCAGAGGGCCTCGATATTCCGAACGAGGTTATGCTTTACA"
-                        "TCGCGAATCAAATCGACAGCAATATTCGGGAACTCGAAGGAGCATTAATCAGAGTTGTCGCTTATTCATC"
-                        "TTTAATTAATAAAGATATTAATGCTGATCTGGCCGCTGAGGCGTTGAAAGATATTATTCCTTCCTCAAAA"
-                        "CCGAAAGTCATTACGATAAAAGAAATTCAGAGGGTAGTAGGCCAGCAATTTAATATTAAACTCGAGGATT"
-                        "TCAAAGCAAAAAAACGGACAAAGTCAGTAGCTTTTCCGCGTCAAATCGCCATGTACTTATCAAGGGAAAT"
-                        "GACTGATTCCTCTCTTCCTAAAATCGGTGAAGAGTTTGGAGGACGTGATCATACGACCGTTATTCATGCG"
-                        "CATGAAAAAATTTCAAAACTGCTGGCAGATGATGAACAGCTTCAGCAGCATGTAAAAGAAATTAAAGAAC"
-                        "AGCTTAAATAG";
+static string dnaAStr =
+"ATGGAAAATATATTAGACCTGTGGAACCAAGCCCTTGCTCAAATCGAAAAAAAGTTGAGCAAACCGAGTT"
+"TTGAGACTTGGATGAAGTCAACCAAAGCCCACTCACTGCAAGGCGATACATTAACAATCACGGCTCCCAA"
+"TGAATTTGCCAGAGACTGGCTGGAGTCCAGATACTTGCATCTGATTGCAGATACTATATATGAATTAACC"
+"GGGGAAGAATTGAGCATTAAGTTTGTCATTCCTCAAAATCAAGATGTTGAGGACTTTATGCCGAAACCGC"
+"AAGTCAAAAAAGCGGTCAAAGAAGATACATCTGATTTTCCTCAAAATATGCTCAATCCAAAATATACTTT"
+"TGATACTTTTGTCATCGGATCTGGAAACCGATTTGCACATGCTGCTTCCCTCGCAGTAGCGGAAGCGCCC"
+"GCGAAAGCTTACAACCCTTTATTTATCTATGGGGGCGTCGGCTTAGGGAAAACACACTTAATGCATGCGA"
+"TCGGCCATTATGTAATAGATCATAATCCTTCTGCCAAAGTGGTTTATCTGTCTTCTGAGAAATTTACAAA"
+"CGAATTCATCAACTCTATCCGAGATAATAAAGCCGTCGACTTCCGCAATCGCTATCGAAATGTTGATGTG"
+"CTTTTGATAGATGATATTCAATTTTTAGCGGGGAAAGAACAAACCCAGGAAGAATTTTTCCATACATTTA"
+"ACACATTACACGAAGAAAGCAAACAAATCGTCATTTCAAGTGACCGGCCGCCAAAGGAAATTCCGACACT"
+"TGAAGACAGATTGCGCTCACGTTTTGAATGGGGACTTATTACAGATATCACACCGCCTGATCTAGAAACG"
+"AGAATTGCAATTTTAAGAAAAAAGGCCAAAGCAGAGGGCCTCGATATTCCGAACGAGGTTATGCTTTACA"
+"TCGCGAATCAAATCGACAGCAATATTCGGGAACTCGAAGGAGCATTAATCAGAGTTGTCGCTTATTCATC"
+"TTTAATTAATAAAGATATTAATGCTGATCTGGCCGCTGAGGCGTTGAAAGATATTATTCCTTCCTCAAAA"
+"CCGAAAGTCATTACGATAAAAGAAATTCAGAGGGTAGTAGGCCAGCAATTTAATATTAAACTCGAGGATT"
+"TCAAAGCAAAAAAACGGACAAAGTCAGTAGCTTTTCCGCGTCAAATCGCCATGTACTTATCAAGGGAAAT"
+"GACTGATTCCTCTCTTCCTAAAATCGGTGAAGAGTTTGGAGGACGTGATCATACGACCGTTATTCATGCG"
+"CATGAAAAAATTTCAAAACTGCTGGCAGATGATGAACAGCTTCAGCAGCATGTAAAAGAAATTAAAGAAC"
+"AGCTTAAATAG";
 
 int main(int argc, const char * argv[]) {
     // Determine if the number of arguments is valid
@@ -76,48 +79,51 @@ int main(int argc, const char * argv[]) {
         cout << "The program accepts the accession number" << endl;
         exit(EXIT_FAILURE);
     }
-    
-    // Get the accession number
-    string accessionnNumber(argv[1]);
-
-    auto start = high_resolution_clock::now();
-    // Download the sequence
-    Sequence sequence = downloadGenFile(accessionnNumber);
-    // Read the oriC_1 sequence from the file
-    Sequence oriC_1(oriC1Str, "oriC_1 of B. subtilis subsp. subtilis str. 168, NC_000964.3");
-    // Read the oriC_2 sequence from the file
-    Sequence oriC_2(oriC2Str, "oriC_2 of B. subtilis subsp. subtilis str. 168, NC_000964.3");
-    // Read the dnaA sequence from the file
-    Sequence dnaA(dnaAStr, "dnaA gene of B subtilis subsp. subtilis str. 168");
-    
-    // Sync the start index of the sequence
-    sequence.syncStart(oriC_1);
-    
-    // Print out the distribution report
-    cout << ">Computing the distribution of the sequence..." << endl;
-    Sequence::Distribution distribution = sequence.computeDistribution();
-    cout << distribution.toString() << endl;
-    cout << endl;
-    // Report locations of oriCs and dnaA
-    reportRelativeLocations(sequence, oriC_1, oriC_2, dnaA);
-    cout << endl;
-    // Print out highlightened 9Mer boxes
-    cout << ">DnaA boxes " << oriC_1.getName() << endl;
-    vector<tuple<tuple<int, int>, tuple<int, int>>> locations = search9MerDnaABoxes(oriC_1);
-    cout << oriC_1.toHighlightenedString(locations) << endl;
-    cout << ">DnaA boxes " << oriC_2.getName() << endl;
-    locations = search9MerDnaABoxes(oriC_2);
-    cout << oriC_2.toHighlightenedString(locations) << endl;
-    cout << ">" << dnaA.getName() << endl;
-    cout << dnaA.toString() << endl;
-    cout << endl;
-    
-    auto end = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(end - start);
-    
-    // To get the value of duration use the count()
-    // member function on the duration object
-    cout << "Execution time:" << duration.count() << "ms" << endl;
+    try {
+        // Get the accession number
+        string accessionnNumber(argv[1]);
+        
+        auto start = high_resolution_clock::now();
+        // Download the sequence
+        Sequence sequence = downloadGenFile(accessionnNumber);
+        // Read the oriC_1 sequence from the file
+        Sequence oriC_1(oriC1Str, "oriC_1 of B. subtilis subsp. subtilis str. 168, NC_000964.3");
+        // Read the oriC_2 sequence from the file
+        Sequence oriC_2(oriC2Str, "oriC_2 of B. subtilis subsp. subtilis str. 168, NC_000964.3");
+        // Read the dnaA sequence from the file
+        Sequence dnaA(dnaAStr, "dnaA gene of B subtilis subsp. subtilis str. 168");
+        
+        // Sync the start index of the sequence
+        sequence.syncStart(oriC_1);
+        
+        // Print out the distribution report
+        cout << ">Computing the distribution of the sequence..." << endl;
+        Sequence::Distribution distribution = sequence.computeDistribution();
+        cout << distribution.toString() << endl;
+        cout << endl;
+        // Report locations of oriCs and dnaA
+        reportRelativeLocations(sequence, oriC_1, oriC_2, dnaA);
+        cout << endl;
+        // Print out highlightened 9Mer boxes
+        cout << ">DnaA boxes " << oriC_1.getName() << endl;
+        vector<tuple<tuple<int, int>, tuple<int, int>>> locations = search9MerDnaABoxes(oriC_1);
+        cout << oriC_1.toHighlightenedString(locations) << endl;
+        cout << ">DnaA boxes " << oriC_2.getName() << endl;
+        locations = search9MerDnaABoxes(oriC_2);
+        cout << oriC_2.toHighlightenedString(locations) << endl;
+        cout << ">" << dnaA.getName() << endl;
+        cout << dnaA.toString() << endl;
+        cout << endl;
+        
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(end - start);
+        
+        // To get the value of duration use the count()
+        // member function on the duration object
+        cout << "Execution time:" << duration.count() << "ms" << endl;
+    } catch (const string & err) {
+        cout << err << endl;
+    }
     
     return 0;
 }
@@ -172,6 +178,9 @@ static Sequence downloadGenFile(const string &accessionNumber) {
     sprintf(tmp, "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=%s&rettype=fasta&retmode=text", accessionNumber.c_str());
     string url(tmp);
     Response r = get(url);
+    if (r.code != 200) {
+        throw string("The file cannot be fetched from the database.");
+    }
     // Read the name of the file
     auto pair = r.headers.find("Content-Disposition");
     string contentDispositionField = pair->second;
@@ -185,7 +194,7 @@ static Sequence downloadGenFile(const string &accessionNumber) {
     string name;
     getline(f, name);
     name.erase(0, 1);
-
+    
     char c;
     string seqStr;
     while (f.get(c)) {
