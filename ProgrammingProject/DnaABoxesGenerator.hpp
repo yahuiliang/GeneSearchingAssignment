@@ -15,6 +15,11 @@
 #include <set>
 #include <string>
 
+/**
+ * Generates 9MerDnaA boxes
+ *
+ * @return the set of DNA boxes
+ */
 std::set<Sequence> gen9MerDnaABoxes();
 
 #endif /* DnaABoxesGenerator_hpp */

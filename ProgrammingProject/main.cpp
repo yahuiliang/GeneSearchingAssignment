@@ -26,10 +26,35 @@ using namespace RestClient;
 /**
  * Download the gen file from the database
  * The accession number should be provided
+ *
+ * @return the sequence downloaded from the database
  */
 static Sequence downloadGenFile(const string &accessionNumber);
+
+/**
+ * Prints the location of the gene section
+ *
+ * @param seqName is the name of the sequence
+ * @param location is the location tuple of the section
+ */
 static void printLocation(const string &seqName, const tuple<tuple<int, int>, tuple<int, int>> location);
+
+/**
+ * Reports relative locations of OriC and DnaA
+ *
+ * @param seq is the sequence which needs to be located with oriC1, oriC2, and dnaA
+ * @param oriC_1 is the oriC_1 sequence to be located
+ * @param oriC_2 is the oriC_2 sequence to be located
+ * @param dnaA is the dnaA sequence to be located
+ */
 static void reportRelativeLocations(const Sequence &seq, const Sequence &oriC_1, const Sequence &oriC_2, const Sequence &dnaA);
+
+/**
+ * Search 9MerDna boxes from the provided sequence
+ *
+ * @param seq is the sequence where to search boxes from
+ * @return the array of locations where dna boxes are at
+ */
 static vector<tuple<tuple<int, int>, tuple<int, int>>> search9MerDnaABoxes(const Sequence &seq);
 
 static string oriC1Str =

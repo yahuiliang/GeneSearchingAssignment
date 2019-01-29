@@ -27,7 +27,7 @@ static vector<string> gen9MerDnaABoxes(const vector<vector<char>> &gen9MerDnaAs,
             for (char gene : gen9MerDnaAs[position]) {
                 char cstring[5];
                 cstring[0] = gene;
-                cstring[1] = NULL;
+                cstring[1] = '\0';
                 string tmp(cstring);
                 seqs.push_back(move(tmp));
             }
